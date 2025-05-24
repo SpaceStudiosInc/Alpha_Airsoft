@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clayton Approved - Alpha Airsoft</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: #222;
+      color: white;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+    }
+
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.1;
+    }
+
+    .background-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    nav {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      border-bottom: 2px solid #1e90ff;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      z-index: 1000;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    nav h1 {
+      font-size: 24px;
+      color: #1e90ff;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      color: #1e90ff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 18px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+
+    nav ul li a:hover,
+    nav ul li a:focus {
+      background: rgba(30, 144, 255, 0.2);
+    }
+
+    .shop-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+      padding-top: 80px; /* Space for fixed nav */
+    }
+
+    .shop-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .shop-header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      color: #1e90ff;
+      margin-bottom: 1rem;
+    }
+
+    .shop-header p {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .product-categories {
+      padding-bottom: 4rem;
+    }
+
+    .category-section {
+      margin-bottom: 4rem;
+      padding: 2rem;
+    }
+
+    .category-section h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      color: #1e90ff;
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #1e90ff;
+    }
+
+    .section-description {
+      font-size: 1.2rem;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .sub-category h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      color: #1e90ff;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .sub-category-description {
+      font-size: 1rem;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .sub-category {
+      margin-bottom: 2rem;
+    }
+
+    .sub-category h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      color: #1e90ff;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .product-card {
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-height: 400px;
+      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(3px);
+    }
+
+    .price {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #1e90ff;
+      margin: 1rem 0;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .shop-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      position: relative;
+      width: 100%;
+      height: 80vh;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .header-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      color: #000;
+      text-align: center;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 0 0 10px 10px;
+      backdrop-filter: blur(2px);
+    }
+
+    .header-content h1 {
+      color: #fff !important;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .header-content p {
+      color: #fff !important;
+      font-size: 1.2rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .disclaimer-container {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 2;
+    }
+
+    .disclaimer {
+      font-size: 0.125rem; /* 1/16th of 2rem (16px) */
+      color: rgba(0, 0, 0, 0.15);
+      background: transparent;
+      padding: 0.05rem 0.1rem;
+      border-radius: 1px;
+      backdrop-filter: blur(0.2px);
+    }
+
+    .header-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      z-index: 1;
+      opacity: 1;
+    }
+
+    .shop-header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .shop-header p {
+      font-size: 1.2rem;
+      color: #fff;
+      opacity: 0.9;
+    }
+
+    .product-card h2 {
+      color: #fff;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .product-card p {
+      color: #fff;
+      opacity: 0.9;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .amazon-button {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: #ff4500;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      font-size: 1rem;
+      margin-top: auto;
+    }
+
+    .amazon-button:hover {
+      background-color: #cc3300;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .product-card h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      color: #1e90ff;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-card p {
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .amazon-button {
+      display: inline-block;
+      background: #ff9900;
+      color: #000;
+      padding: 0.8rem 1.5rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      max-width: 200px;
+      margin: 0 auto;
+    }
+
+    .amazon-button:hover {
+      background: #ff8000;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 12px;
+      }
+
+      nav ul {
+        display: none;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-image">
+    <img src="images/background.png" alt="Background">
+  </div>
+
+  <nav>
+    <h1>Alpha Airsoft</h1>
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../shop.html">Clayton Approved</a></li>
+      <li><a href="../map.html">Map</a></li>
+      <li><a href="../signup.html">Waiver</a></li>
+    </ul>
+  </nav>
+
+  <div class="shop-container">
+    <div class="shop-header">
+      <div class="disclaimer-container">
+        <p class="disclaimer">*Prices and Clayton's opinions may vary</p>
+      </div>
+      <div class="header-content">
+        <h1>Clayton Approved Gear</h1>
+        <p>Handpicked airsoft equipment for the discerning player</p>
+      </div>
+      <img src="/shop/approvedbg.png" alt="Clayton Approved Gear" class="header-image">
+    </div>
+
+    <div class="product-categories">
+      <!-- Protective Wear -->
+      <div class="category-section">
+        <h2>Protective Wear</h2>
+        <p class="section-description">Protect yourself with our selection of high-quality protective gear.</p>
+        <div class="product-grid">
+          <!-- Safety Glasses -->
+          <div class="product-card">
+            <img src="/shop/safety.jpg" alt="Pyramex Safety Glasses">
+            <h2>Pyramex Safety Glasses</h2>
+            <p>Gray Anti-Fog Dual Lens</p>
+            <p class="price">$14.75</p>
+            <a href="https://www.amazon.com/Pyramex-Safety-Products-GB6420SDT-Anti-Fog/dp/B004RDJ9IU" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- Sporty Goggles -->
+          <div class="product-card">
+            <img src="/shop/Sporty.jpg" alt="Pyramex Sporty Goggles">
+            <h2>Pyramex Sporty Goggles</h2>
+            <p>Anti-Fog, Black Frame/Clear Lens</p>
+            <p class="price">$22.99</p>
+            <a href="https://www.amazon.com/Pyramex-I-Force-Sporty-Anti-Fog-Goggle/dp/B006WPSDXS" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- Tactical Goggles -->
+          <div class="product-card">
+            <img src="/shop/tactical.jpg" alt="OneTigris Tactical Goggles">
+            <h2>OneTigris Tactical Goggles</h2>
+            <p>Anti-Fog, Interchangeable Lenses</p>
+            <p class="price">$24.99</p>
+            <a href="https://www.amazon.com/OneTigris-Tactical-Eyeglasses-Protection-Interchangeable/dp/B0BZJ95G8R" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- Full Face Mask -->
+          <div class="product-card">
+            <img src="/shop/Full face.jpg" alt="ATAIRSOFT Full Face Mask">
+            <h2>ATAIRSOFT Full Face Mask</h2>
+            <p>Anti-Fog, 3 Interchangeable Lenses</p>
+            <p class="price">$34.99</p>
+            <a href="https://www.amazon.com/ATAIRSOFT-Tactical-Protective-Anti-Fog-Interchangable/dp/B08D3DFG54" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- Tactical Helmet -->
+          <div class="product-card">
+            <img src="/shop/Tactical Full.jpg" alt="HK Army Helmet">
+            <h2>HK Army Helmet</h2>
+            <p>Anti-Fog Goggle System</p>
+            <p class="price">$44.95</p>
+            <a href="https://www.amazon.com/HK-Army-Paintball-Goggle-Thermal/dp/B08T7RN7ZP" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- Half Face Mask -->
+          <div class="product-card">
+            <img src="/shop/Half Face.jpg" alt="OneTigris Half Face Mask">
+            <h2>OneTigris Half Face Mask</h2>
+            <p>Mesh Mask with Ear Protection</p>
+            <p class="price">$22.99</p>
+            <a href="https://www.amazon.com/OneTigris-Foldable-Protection-Military-Protective/dp/B078MQJ6C3" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- OneTigris Balaclava -->
+          <div class="product-card">
+            <img src="/shop/Balaclava.jpg" alt="OneTigris Balaclava">
+            <h2>OneTigris Balaclava</h2>
+            <p>Ninja Style Tactical Mask with Full Face Protection</p>
+            <p class="price">$27.99</p>
+            <a href="https://www.amazon.com/OneTigris-Balaclava-Ninja-Style-Protection/dp/B07V1FZLZB" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guns -->
+      <div class="category-section">
+        <h2>Guns</h2>
+        <p class="section-description">Choose from our selection of high-quality airsoft rifles.</p>
+        
+        <!-- Rifles -->
+        <div class="sub-category">
+          <h3>Rifles</h3>
+          <p class="sub-category-description">Automatic Electric Guns (AEGs)</p>
+          <div class="product-grid">
+            <!-- Lancer Tactical M4A1 -->
+            <div class="product-card">
+              <img src="/shop/M4a1.jpg" alt="Lancer Tactical M4A1">
+              <h2>Lancer Tactical M4A1</h2>
+              <p>AEG</p>
+              <p class="price">$279.99</p>
+            </div>
+
+            <!-- SSR4 Mk1 Gen2 -->
+            <div class="product-card">
+              <img src="/shop/ssr4 .png" alt="SSR4 Mk1 Gen2">
+              <h2>SSR4 Mk1 Gen2</h2>
+              <p>AEG</p>
+              <p class="price">$199 - $263</p>
+              <a href="https://us.novritsch.com/product/ssr4-automatic-electric-gun-aeg/" class="amazon-button" target="_blank">Buy on Novritsch</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pistols -->
+        <div class="sub-category">
+          <h3>Pistols</h3>
+          <div class="product-grid">
+            <!-- Elite Force 1911 -->
+            <div class="product-card">
+              <img src="/shop/1911.jpg" alt="Elite Force 1911">
+              <h2>Elite Force 1911</h2>
+              <p>Blowback Powered Airsoft Gun</p>
+              <a href="https://www.amazon.com/Elite-Force-Blowback-Powered-Airsoft/dp/B00DNLT2SY" class="amazon-button" target="_blank">Buy on Amazon</a>
+            </div>
+
+            <!-- Elite Force H8R Gen2 -->
+            <div class="product-card">
+              <img src="/shop/h8r.jpg" alt="Elite Force H8R">
+              <h2>Elite Force H8R Gen2</h2>
+              <p>Revolver Pistol with Realistic Blowback Action</p>
+              <a href="https://www.amazon.com/Elite-Force-Revolver-Pistol-Airsoft/dp/B07RBN2L21" class="amazon-button" target="_blank">Buy on Amazon</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accessories -->
+      <div class="category-section">
+        <h2>Accessories</h2>
+        <p class="section-description">Essential accessories.</p>
+        <div class="product-grid">
+          <!-- Game Face Match Grade BBs -->
+          <div class="product-card">
+            <img src="/shop/BBs.jpg" alt="Game Face BBs">
+            <h2>Game Face BBs</h2>
+            <p>20g White, 10,000-Count</p>
+            <a href="https://www.amazon.com/Game-Face-20002-20-Gram-000-Count/dp/B00BWL1W3K" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- Game Face 20GPW5J BBs -->
+          <div class="product-card">
+            <img src="/shop/10k bb.jpg" alt="Game Face 20GPW5J">
+            <h2>Game Face 20GPW5J</h2>
+            <p>20g White, 5000-Count</p>
+            <a href="https://www.amazon.com/Game-Face-20GPW5J-20-Gram-5000-Count/dp/B01DMJIDYK" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- Tenergy Battery Pack -->
+          <div class="product-card">
+            <img src="/shop/Battery.jpg" alt="Tenergy Battery">
+            <h2>Tenergy Battery Pack</h2>
+            <p>9.6V 1600mAh NiMH</p>
+            <a href="https://www.amazon.com/Tenergy-Nunchuck-Connector-Butterfly-8-4V-9-6V/dp/B009SD6LYO" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- Lipo Battery -->
+          <div class="product-card">
+            <img src="/shop/lipos.jpg" alt="11.1V 2200mAh LiPo Battery">
+            <h2>11.1V 2200mAh LiPo Battery</h2>
+            <p>High Capacity LiPo Battery with T-Plug</p>
+            <p class="price">$39.99</p>
+            <a href="https://www.amazon.com/dp/B0C2Q2M9PD" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- Lipo Charger -->
+          <div class="product-card">
+            <img src="/shop/lipocharger.jpg" alt="LiPo Charger">
+            <h2>Smart Balance LiPo Charger</h2>
+            <p>Smart Balance Charger with LCD Display</p>
+            <p class="price">$29.99</p>
+            <a href="https://www.amazon.com/dp/B09PMP1DS3" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+
+          <!-- MOSFET -->
+          <div class="product-card">
+            <img src="/shop/mosfet.jpg" alt="27503 MOSFET">
+            <h2>27503 MOSFET</h2>
+            <p>High-Performance MOSFET Upgrade</p>
+            <p class="price">$39.99</p>
+            <a href="https://www.evike.com/products/27503/" class="amazon-button" target="_blank">Buy on Evike</a>
+          </div>
+
+          <!-- Sling -->
+          <div class="product-card">
+            <img src="/shop/sling.jpg" alt="CVLIFE Two-Point Sling">
+            <h2>CVLIFE Two-Point Sling</h2>
+            <p>Adjustable Length Swivel Sling</p>
+            <p class="price">$19.99</p>
+            <a href="https://www.amazon.com/CVLIFE-Two-Point-Adjustable-Length-Swivel/dp/B08PFRDCDB" class="amazon-button" target="_blank">Buy on Amazon</a>
+          </div>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
