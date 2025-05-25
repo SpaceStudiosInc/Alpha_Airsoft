@@ -178,72 +178,56 @@
       padding-top: 80px;
     }
 
-    .header-content {
-      position: relative;
-      z-index: 2;
-      margin-bottom: 1rem;
-    }
-
     .shop-header h1 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 2.5rem;
+      font-size: 3.5rem;
       color: #1e90ff;
       margin: 0;
       text-align: center;
       word-wrap: break-word;
       padding: 20px 15px 0;
-      position: relative;
-      z-index: 3;
     }
     
     @media screen and (max-width: 768px) {
       .shop-header {
         padding-top: 70px;
+        position: relative;
       }
       
       .header-content {
         position: relative;
-        width: 100%;
-        padding: 0 15px;
-        box-sizing: border-box;
-      }
-
-      .header-image-container {
-        position: relative;
-        width: 100%;
-        height: 150px;
-        overflow: hidden;
-        border-radius: 4px;
+        z-index: 2;
       }
 
       .header-image {
-        width: 100%;
-        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 15px;
+        right: 15px;
+        width: calc(100% - 30px);
+        height: 150px;
         object-fit: cover;
+        border-radius: 4px;
+        z-index: 1;
       }
 
       .header-content h1 {
-        position: absolute;
-        top: 10px;
-        left: 15px;
-        right: 15px;
-        font-size: 1rem;
+        position: relative;
+        font-size: 1.1rem;
         color: #fff;
-        margin: 0;
+        margin: 0 0 5px 0;
+        padding: 10px 15px 0;
         text-align: center;
         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-        font-weight: 600;
         z-index: 2;
       }
       
       .header-content p {
-        position: absolute;
-        top: 35px;
-        left: 15px;
-        right: 15px;
-        font-size: 0.8rem;
+        position: relative;
+        font-size: 0.85rem;
         color: #fff;
         margin: 0;
+        padding: 0 15px 10px;
         text-align: center;
         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
         z-index: 2;
@@ -536,12 +520,10 @@
         <p class="disclaimer">*Prices and Clayton's opinions may vary</p>
       </div>
       <div class="header-content">
-        <div class="header-image-container">
-          <h1>Clayton Approved Gear</h1>
-          <p>Airsoft equipment for any player</p>
-          <img src="images/approvedbg.jpg" alt="Clayton Approved Gear" class="header-image">
-        </div>
+        <h1>Clayton Approved Gear</h1>
+        <p>Airsoft equipment for any player</p>
       </div>
+      <img src="images/approvedbg.jpg" alt="Clayton Approved Gear" class="header-image">
     </div>
 
     <div class="product-categories">
