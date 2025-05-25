@@ -208,12 +208,15 @@
       border-radius: 4px;
     }
 
+    /* Mobile Layout Styles */
     @media screen and (max-width: 768px) {
+      /* Shop Header Styles for Mobile */
       .shop-header {
         padding-top: 70px;
         position: relative;
       }
       
+      /* Text container positioned over the image */
       .header-content {
         position: absolute;
         top: 0;
@@ -229,7 +232,7 @@
         background: none;
       }
 
-      /* Mobile image styles */
+      /* Image container styling */
       .shop-header {
         height: 100px;
         margin: 0 10px 10px;
@@ -239,6 +242,7 @@
         background: none;
       }
       
+      /* Image itself */
       .header-image {
         position: absolute;
         top: 0;
@@ -254,39 +258,24 @@
         -webkit-transform-origin: center;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
+      }
 
-          .shop-header h1 {
-            font-size: 0.7rem;
-            color: #fff;
-            padding: 0 5px;
-            margin: 0 0 1px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-shadow: 
-              -1px -1px 0 #000,
-              1px -1px 0 #000,
-              -1px 1px 0 #000,
-              1px 1px 0 #000;
-          }
-          
-          .disclaimer-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 3;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 1px 5px;
-            text-align: center;
-          }
-        text-overflow: ellipsis;
+      /* Main heading text */
+      .shop-header h1 {
+        font-size: 0.7rem;
+        color: #fff;
+        padding: 0 5px;
+        margin: 0 0 1px 0;
+        white-space: nowrap;
+        overflow: hidden;
         text-shadow: 
           -1px -1px 0 #000,
           1px -1px 0 #000,
           -1px 1px 0 #000,
           1px 1px 0 #000;
       }
-      
+
+      /* Disclaimer container */
       .disclaimer-container {
         position: absolute;
         bottom: 0;
@@ -297,6 +286,7 @@
         text-align: center;
       }
 
+      /* Disclaimer text */
       .disclaimer {
         font-size: 0.45rem;
         color: #fff;
@@ -307,7 +297,8 @@
         text-shadow: none;
         white-space: nowrap;
       }
-      
+
+      /* Description text */
       .header-content p {
         font-size: 0.6rem;
         color: #fff;
@@ -318,28 +309,7 @@
         padding: 0 5px;
       }
 
-      .header-content h1 {
-        position: relative;
-        font-size: 1.1rem;
-        color: #fff;
-        margin: 0 0 5px 0;
-        padding: 10px 15px 0;
-        text-align: center;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-        z-index: 2;
-      }
-      
-      .header-content p {
-        position: relative;
-        font-size: 0.85rem;
-        color: #fff;
-        margin: 0;
-        padding: 0 15px 10px;
-        text-align: center;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-        z-index: 2;
-      }
-      
+      /* Background image styling */
       .background-image {
         position: fixed;
         top: 70px; /* Start below header */
