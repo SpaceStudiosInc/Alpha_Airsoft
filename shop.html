@@ -176,6 +176,8 @@
     .shop-header {
       position: relative;
       padding-top: 80px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .shop-header h1 {
@@ -199,6 +201,7 @@
         z-index: 2;
       }
 
+      /* Mobile image styles */
       .header-image {
         position: absolute;
         top: 0;
@@ -209,6 +212,17 @@
         object-fit: cover;
         border-radius: 4px;
         z-index: 1;
+      }
+      
+      /* Desktop image styles */
+      @media screen and (min-width: 769px) {
+        .header-image {
+          position: static;
+          width: 100%;
+          max-height: 300px;
+          margin: 20px 0;
+          display: block;
+        }
       }
 
       .header-content h1 {
