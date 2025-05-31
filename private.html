@@ -39,11 +39,6 @@
       padding: 0;
     }
 
-    /* Mobile menu open state */
-    .nav-links.open {
-      transform: translateX(0%);
-    }
-
     /* Mobile styles */
     @media screen and (max-width: 768px) {
       .hamburger {
@@ -70,28 +65,27 @@
         overflow-y: auto;
       }
 
-      .nav-links li {
-        opacity: 0;
-      }
-
       .nav-links.open {
         transform: translateX(0);
-      }
-
-      .nav-links.open li {
-        opacity: 1;
       }
 
       .nav-links li {
         opacity: 0;
         transition: opacity 0.5s ease 0.2s;
       }
+
+      .nav-links.open li {
+        opacity: 1;
+      }
     }
 
-    /* Reset and basic styles */
+    /* Reset and base styles */
     * {
-      margin: 0; padding: 0; box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #000;
@@ -102,7 +96,7 @@
       overflow: hidden;
     }
 
-    /* Navbar styling */
+    /* Navbar */
     nav {
       width: 100%;
       background: #000;
@@ -112,16 +106,19 @@
       align-items: center;
       justify-content: space-between;
     }
+
     nav h1 {
       font-size: 24px;
       color: #1e90ff;
       font-weight: 600;
     }
+
     nav ul {
       list-style: none;
       display: flex;
       gap: 20px;
     }
+
     nav ul li a {
       color: #1e90ff;
       text-decoration: none;
@@ -131,12 +128,13 @@
       border-radius: 4px;
       transition: background 0.3s ease;
     }
+
     nav ul li a:hover,
     nav ul li a:focus {
       background: rgba(30, 144, 255, 0.2);
     }
 
-    /* Iframe fills remaining space below navbar */
+    /* Iframe */
     iframe {
       flex-grow: 1;
       border: none;
@@ -165,13 +163,10 @@
     </ul>
   </nav>
 
-<a href="https://spacestudiosinc.github.io/AlphaShooter/" target="_blank" style="color: #1e90ff; font-size: 24px; text-align: center; display: block; margin-top: 40px;">
-  Launch Alpha Shooter
-</a>
-
+  <!-- Embed the Alpha Shooter GitHub Game -->
+  <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
 
   <script>
-    // Mobile menu toggle
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
     const navItems = document.querySelectorAll('.nav-links li');
@@ -181,11 +176,9 @@
       hamburger.classList.toggle('open');
 
       navItems.forEach((link, index) => {
-        if (link.style.animation) {
-          link.style.animation = '';
-        } else {
-          link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
-        }
+        link.style.animation = navLinks.classList.contains('open')
+          ? `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`
+          : '';
       });
     }
 
@@ -204,9 +197,9 @@
     }
 
     document.addEventListener('click', (e) => {
-      if (window.innerWidth <= 768 && 
-          !e.target.closest('nav') && 
-          navLinks && 
+      if (window.innerWidth <= 768 &&
+          !e.target.closest('nav') &&
+          navLinks &&
           navLinks.classList.contains('open')) {
         toggleMenu();
       }
