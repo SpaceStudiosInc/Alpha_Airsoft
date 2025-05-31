@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/SpaceStudiosInc/AlphaAirsoft/df99c32bb628e714b6afe45408a7fccf6d0023e1/images/favicon.png" />
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/SpaceStudiosInc/AlphaAirsoft/df99c32bb628e714b6afe45408a7fccf6d0023e1/images/favicon.png" />
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -164,8 +164,9 @@
       <li><a href="signup.html">Waivers</a></li>
     </ul>
   </nav>
-<p> What are you looking for?</p>
-   
+
+  <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
+
   <script>
     // Mobile menu toggle
     const hamburger = document.querySelector('.hamburger');
@@ -173,11 +174,9 @@
     const navItems = document.querySelectorAll('.nav-links li');
 
     function toggleMenu() {
-      // Toggle menu
       navLinks.classList.toggle('open');
       hamburger.classList.toggle('open');
-      
-      // Animate links
+
       navItems.forEach((link, index) => {
         if (link.style.animation) {
           link.style.animation = '';
@@ -191,7 +190,6 @@
       hamburger.addEventListener('click', toggleMenu);
     }
 
-    // Close menu when clicking on a link
     if (navItems) {
       navItems.forEach(link => {
         link.addEventListener('click', () => {
@@ -202,8 +200,6 @@
       });
     }
 
-
-    // Close menu when clicking outside
     document.addEventListener('click', (e) => {
       if (window.innerWidth <= 768 && 
           !e.target.closest('nav') && 
