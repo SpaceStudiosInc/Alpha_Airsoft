@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/SpaceStudiosInc/AlphaAirsoft/df99c32bb628e714b6afe45408a7fccf6d0023e1/images/favicon.png" />
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Alpha Shooter</title>
@@ -134,12 +133,45 @@
       background: rgba(30, 144, 255, 0.2);
     }
 
+    /* Game container */
+    .game-container {
+      flex-grow: 1;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-image: url('cabinet.png'); /* Replace with your image path */
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
     /* Iframe */
     iframe {
-      flex-grow: 1;
+      position: absolute;
       border: none;
-      width: 100%;
-      display: block;
+      /* Adjust these values to match the black square's size and position in cabinet.png */
+      width: 80%; /* Example: adjust based on the black square's size */
+      height: 80%; /* Example: adjust based on the black square's size */
+      /* Center the iframe; adjust top/left for precise alignment */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Responsive adjustments */
+    @media screen and (max-width: 768px) {
+      .game-container {
+        background-size: cover; /* Ensure image fits smaller screens */
+      }
+
+      iframe {
+        width: 90%; /* Adjust for smaller screens */
+        height: 70%; /* Adjust for smaller screens */
+      }
     }
   </style>
 </head>
@@ -163,8 +195,10 @@
     </ul>
   </nav>
 
-  <!-- Embed the Alpha Shooter GitHub Game -->
-  <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
+  <!-- Game container with iframe -->
+  <div class="game-container">
+    <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
+  </div>
 
   <script>
     const hamburger = document.querySelector('.hamburger');
