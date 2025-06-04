@@ -3,7 +3,7 @@
 <head>
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/SpaceStudiosInc/AlphaAirsoft/df99c32bb628e714b6afe45408a7fccf6d0023e1/images/favicon.png" />
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alpha Shooter</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
@@ -133,30 +133,84 @@
       background: rgba(30, 144, 255, 0.2);
     }
 
+    /* Game container */
+    .game-container {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: calc(100vh - 70px); /* Account for navbar height */
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-background {
+      width: 1073px; /* Native image width */
+      height: 784px; /* Native image height */
+      background-image: url('cabinet.png'); /* Replace with your image path */
+      background-size: 100% 100%; /* Fit image exactly to container */
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+    }
+
     /* Iframe */
     iframe {
-      flex-grow: 1;
+      position: absolute;
+      top: 245px; /* Offset from top of background image */
+      left: 272px; /* Offset from left of background image */
+      width: 565px; /* Exact game width */
+      height: 400px; /* Exact game height */
       border: none;
-      width: 100%;
-      max-width: 565px; /* Original game width */
-      height: 100%;
-      max-height: 400px; /* Original game height */
-      margin: auto; /* Center horizontally */
-      display: block;
     }
 
     /* Responsive adjustments */
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1073px) {
+      .game-background {
+        /* Scale proportionally based on viewport width */
+        width: 100vw;
+        height: calc(100vw * (784 / 1073)); /* Maintain image aspect ratio */
+        max-height: calc(100vh - 70px); /* Ensure it fits vertically */
+      }
+
       iframe {
-        max-width: 90vw; /* Scale down for smaller screens */
-        max-height: calc(90vw * (400 / 565)); /* Maintain aspect ratio */
+        /* Scale iframe and offsets proportionally */
+        width: calc(565px * (100vw / 1073));
+        height: calc(400px * (100vw / 1073));
+        top: calc(245px * (100vw / 1073));
+        left: calc(272px * (100vw / 1073));
       }
     }
 
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 768px) {
+      .game-background {
+        width: 90vw;
+        height: calc(90vw * (784 / 1073));
+        max-height: calc(100vh - 70px);
+      }
+
       iframe {
-        max-width: 95vw; /* Further scale down for very small screens */
-        max-height: calc(95vw * (400 / 565)); /* Maintain aspect ratio */
+        width: calc(565px * (90vw / 1073));
+        height: calc(400px * (90vw / 1073));
+        top: calc(245px * (90vw / 1073));
+        left: calc(272px * (90vw / 1073));
+      }
+    }
+
+    @media screen and (max-height: 784px) {
+      .game-background {
+        height: calc(100vh - 70px);
+        width: calc((100vh - 70px) * (1073 / 784)); /* Maintain aspect ratio */
+        max-width: 100vw;
+      }
+
+      iframe {
+        /* Scale based on viewport height */
+        width: calc(565px * ((100vh - 70px) / 784));
+        height: calc(400px * ((100vh - 70px) / 784));
+        top: calc(245px * ((100vh - 70px) / 784));
+        left: calc(272px * ((100vh - 70px) / 784));
       }
     }
   </style>
@@ -181,8 +235,12 @@
     </ul>
   </nav>
 
-  <!-- Iframe centered in page -->
-  <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
+  <!-- Game container with background and iframe -->
+  <div class="game-container">
+    <div class="game-background">
+      <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
+    </div>
+  </div>
 
   <script>
     const hamburger = document.querySelector('.hamburger');
