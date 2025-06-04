@@ -133,53 +133,30 @@
       background: rgba(30, 144, 255, 0.2);
     }
 
-    /* Game container */
-    .game-container {
-      flex-grow: 1;
-      position: relative;
-      width: 100%;
-      height: 100%;
-      background-image: url('cabinet.png'); /* Replace with your image path */
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
     /* Iframe */
     iframe {
-      position: absolute;
+      flex-grow: 1;
       border: none;
-      width: 565px; /* Matches black square width */
-      height: 400px; /* Matches black square height */
-      top: 245px; /* Offset from top */
-      left: 272px; /* Offset from left */
+      width: 100%;
+      max-width: 565px; /* Original game width */
+      height: 100%;
+      max-height: 400px; /* Original game height */
+      margin: auto; /* Center horizontally */
+      display: block;
     }
 
     /* Responsive adjustments */
-    @media screen and (max-width: 1073px) {
-      .game-container {
-        background-size: cover; /* Ensure image fits smaller screens */
-      }
-
+    @media screen and (max-width: 768px) {
       iframe {
-        /* Scale iframe proportionally based on container width */
-        width: calc(565px * (100vw / 1073));
-        height: calc(400px * (100vw / 1073));
-        top: calc(245px * (100vw / 1073));
-        left: calc(272px * (100vw / 1073));
+        max-width: 90vw; /* Scale down for smaller screens */
+        max-height: calc(90vw * (400 / 565)); /* Maintain aspect ratio */
       }
     }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 480px) {
       iframe {
-        width: calc(565px * (90vw / 1073)); /* Further adjust for smaller screens */
-        height: calc(400px * (90vw / 1073));
-        top: calc(245px * (90vw / 1073));
-        left: calc(272px * (90vw / 1073));
+        max-width: 95vw; /* Further scale down for very small screens */
+        max-height: calc(95vw * (400 / 565)); /* Maintain aspect ratio */
       }
     }
   </style>
@@ -204,10 +181,8 @@
     </ul>
   </nav>
 
-  <!-- Game container with iframe -->
-  <div class="game-container">
-    <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
-  </div>
+  <!-- Iframe centered in page -->
+  <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
 
   <script>
     const hamburger = document.querySelector('.hamburger');
