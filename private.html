@@ -3,7 +3,7 @@
 <head>
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/SpaceStudiosInc/AlphaAirsoft/df99c32bb628e714b6afe45408a7fccf6d0023e1/images/favicon.png" />
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Alpha Shooter</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
@@ -19,6 +19,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
       overflow: hidden;
+      touch-action: manipulation; /* Prevent double-tap zoom on mobile */
     }
 
     nav {
@@ -30,6 +31,10 @@
       align-items: center;
       justify-content: space-between;
       height: 70px;
+      position: fixed; /* Ensure nav stays on top */
+      top: 0;
+      left: 0;
+      z-index: 1000;
     }
 
     nav h1 {
@@ -107,7 +112,7 @@
         gap: 15px;
         transform: translateX(100%);
         transition: transform 0.3s ease-in-out;
-        z-index: 5;
+        z-index: 999; /* Below hamburger */
         padding: 20px 15px;
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
         margin: 0;
@@ -130,7 +135,11 @@
 
     .game-container {
       width: 100%;
-      height: calc(100vh - 70px); /* Full screen minus navbar */
+      height: calc(100vh - 70px);
+      position: absolute;
+      top: 70px; /* Below fixed navbar */
+      left: 0;
+      overflow: hidden;
     }
 
     iframe {
@@ -138,6 +147,34 @@
       height: 100%;
       border: none;
       display: block;
+      transform: scale(1);
+      transform-origin: top left;
+    }
+
+    /* Ensure iframe scales properly on mobile */
+    @media screen and (max-width: 768px) {
+      .game-container {
+        height: calc(100vh - 70px);
+      }
+
+      iframe {
+        width: 100vw;
+        height: 100%;
+        max-width: 100%;
+        max-height: calc(100vh - 70px);
+      }
+    }
+
+    /* Handle landscape orientation */
+    @media screen and (max-width: 768px) and (orientation: landscape) {
+      .game-container {
+        height: calc(100vh - 70px);
+      }
+
+      iframe {
+        height: calc(100vh - 70px);
+        width: 100vw;
+      }
     }
   </style>
 </head>
@@ -161,9 +198,8 @@
     </ul>
   </nav>
 
-  <!-- Fullscreen Game -->
   <div class="game-container">
-    <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
+    <iframe src="https://spacestudiosinc.github.io/AlphaShooter/" allow="fullscreen"></iframe>
   </div>
 
   <script>
@@ -184,11 +220,17 @@
 
     if (hamburger) {
       hamburger.addEventListener('click', toggleMenu);
+      hamburger.addEventListener('touchstart', toggleMenu); // Add touch support
     }
 
     if (navItems) {
       navItems.forEach(link => {
         link.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            toggleMenu();
+          }
+        });
+        link.addEventListener('touchstart', () => {
           if (window.innerWidth <= 768) {
             toggleMenu();
           }
@@ -204,6 +246,31 @@
         toggleMenu();
       }
     });
+
+    document.addEventListener('touchstart', (e) => {
+      if (window.innerWidth <= 768 &&
+          !e.target.closest('nav') &&
+          navLinks &&
+          navLinks.classList.contains('open')) {
+        toggleMenu();
+      }
+    });
+
+    // Adjust iframe size on resize or orientation change
+    window.addEventListener('resize', adjustIframe);
+    window.addEventListener('orientationchange', adjustIframe);
+
+    function adjustIframe() {
+      const iframe = document.querySelector('iframe');
+      const container = document.querySelector('.game-container');
+      if (iframe && container) {
+        iframe.style.width = '100vw';
+        iframe.style.height = `${container.clientHeight}px`;
+      }
+    }
+
+    // Initial adjustment
+    adjustIframe();
   </script>
 </body>
 </html>
