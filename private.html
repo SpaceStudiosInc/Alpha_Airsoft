@@ -7,7 +7,58 @@
   <title>Alpha Shooter</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    /* Mobile menu styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      background-color: #000;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    nav {
+      width: 100%;
+      background: #000;
+      border-bottom: 2px solid #1e90ff;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    nav h1 {
+      font-size: 24px;
+      color: #1e90ff;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      color: #1e90ff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 18px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+
+    nav ul li a:hover,
+    nav ul li a:focus {
+      background: rgba(30, 144, 255, 0.2);
+    }
+
     .hamburger {
       display: none;
       flex-direction: column;
@@ -38,7 +89,6 @@
       padding: 0;
     }
 
-    /* Mobile styles */
     @media screen and (max-width: 768px) {
       .hamburger {
         display: flex;
@@ -78,140 +128,16 @@
       }
     }
 
-    /* Reset and base styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #000;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* Navbar */
-    nav {
-      width: 100%;
-      background: #000;
-      border-bottom: 2px solid #1e90ff;
-      padding: 12px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    nav h1 {
-      font-size: 24px;
-      color: #1e90ff;
-      font-weight: 600;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-    }
-
-    nav ul li a {
-      color: #1e90ff;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 18px;
-      padding: 6px 12px;
-      border-radius: 4px;
-      transition: background 0.3s ease;
-    }
-
-    nav ul li a:hover,
-    nav ul li a:focus {
-      background: rgba(30, 144, 255, 0.2);
-    }
-
-    /* Game container */
     .game-container {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       width: 100%;
-      height: calc(100vh - 70px); /* Account for navbar height */
-      position: relative;
-      overflow: hidden;
+      height: calc(100vh - 70px); /* Full screen minus navbar */
     }
 
-    .game-background {
-      width: 1073px; /* Native image width */
-      height: 784px; /* Native image height */
-      background-image: url('cabinet.png'); /* Replace with your image path */
-      background-size: 100% 100%; /* Fit image exactly to container */
-      background-position: center;
-      background-repeat: no-repeat;
-      position: relative;
-    }
-
-    /* Iframe */
     iframe {
-      position: absolute;
-      top: 245px; /* Offset from top of background image */
-      left: 272px; /* Offset from left of background image */
-      width: 565px; /* Exact game width */
-      height: 400px; /* Exact game height */
+      width: 100%;
+      height: 100%;
       border: none;
-    }
-
-    /* Responsive adjustments */
-    @media screen and (max-width: 1073px) {
-      .game-background {
-        /* Scale proportionally based on viewport width */
-        width: 100vw;
-        height: calc(100vw * (784 / 1073)); /* Maintain image aspect ratio */
-        max-height: calc(100vh - 70px); /* Ensure it fits vertically */
-      }
-
-      iframe {
-        /* Scale iframe and offsets proportionally */
-        width: calc(565px * (100vw / 1073));
-        height: calc(400px * (100vw / 1073));
-        top: calc(245px * (100vw / 1073));
-        left: calc(272px * (100vw / 1073));
-      }
-    }
-
-    @media screen and (max-width: 768px) {
-      .game-background {
-        width: 90vw;
-        height: calc(90vw * (784 / 1073));
-        max-height: calc(100vh - 70px);
-      }
-
-      iframe {
-        width: calc(565px * (90vw / 1073));
-        height: calc(400px * (90vw / 1073));
-        top: calc(245px * (90vw / 1073));
-        left: calc(272px * (90vw / 1073));
-      }
-    }
-
-    @media screen and (max-height: 784px) {
-      .game-background {
-        height: calc(100vh - 70px);
-        width: calc((100vh - 70px) * (1073 / 784)); /* Maintain aspect ratio */
-        max-width: 100vw;
-      }
-
-      iframe {
-        /* Scale based on viewport height */
-        width: calc(565px * ((100vh - 70px) / 784));
-        height: calc(400px * ((100vh - 70px) / 784));
-        top: calc(245px * ((100vh - 70px) / 784));
-        left: calc(272px * ((100vh - 70px) / 784));
-      }
+      display: block;
     }
   </style>
 </head>
@@ -235,11 +161,9 @@
     </ul>
   </nav>
 
-  <!-- Game container with background and iframe -->
+  <!-- Fullscreen Game -->
   <div class="game-container">
-    <div class="game-background">
-      <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
-    </div>
+    <iframe src="https://spacestudiosinc.github.io/AlphaShooter/"></iframe>
   </div>
 
   <script>
