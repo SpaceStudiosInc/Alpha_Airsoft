@@ -19,7 +19,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
       overflow: hidden;
-      touch-action: manipulation; /* Prevent double-tap zoom on mobile */
+      touch-action: manipulation;
     }
 
     nav {
@@ -31,7 +31,7 @@
       align-items: center;
       justify-content: space-between;
       height: 70px;
-      position: fixed; /* Ensure nav stays on top */
+      position: fixed;
       top: 0;
       left: 0;
       z-index: 1000;
@@ -112,7 +112,7 @@
         gap: 15px;
         transform: translateX(100%);
         transition: transform 0.3s ease-in-out;
-        z-index: 999; /* Below hamburger */
+        z-index: 999;
         padding: 20px 15px;
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
         margin: 0;
@@ -137,21 +137,23 @@
       width: 100%;
       height: calc(100vh - 70px);
       position: absolute;
-      top: 70px; /* Below fixed navbar */
+      top: 70px;
       left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
     }
 
     iframe {
-      width: 100%;
-      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
       border: none;
       display: block;
       transform: scale(1);
-      transform-origin: top left;
+      transform-origin: center center;
     }
 
-    /* Ensure iframe scales properly on mobile */
     @media screen and (max-width: 768px) {
       .game-container {
         height: calc(100vh - 70px);
@@ -165,7 +167,6 @@
       }
     }
 
-    /* Handle landscape orientation */
     @media screen and (max-width: 768px) and (orientation: landscape) {
       .game-container {
         height: calc(100vh - 70px);
@@ -174,6 +175,8 @@
       iframe {
         height: calc(100vh - 70px);
         width: 100vw;
+        max-width: 100%;
+        max-height: 100%;
       }
     }
   </style>
@@ -220,7 +223,7 @@
 
     if (hamburger) {
       hamburger.addEventListener('click', toggleMenu);
-      hamburger.addEventListener('touchstart', toggleMenu); // Add touch support
+      hamburger.addEventListener('touchstart', toggleMenu);
     }
 
     if (navItems) {
@@ -256,7 +259,6 @@
       }
     });
 
-    // Adjust iframe size on resize or orientation change
     window.addEventListener('resize', adjustIframe);
     window.addEventListener('orientationchange', adjustIframe);
 
@@ -269,7 +271,6 @@
       }
     }
 
-    // Initial adjustment
     adjustIframe();
   </script>
 </body>
