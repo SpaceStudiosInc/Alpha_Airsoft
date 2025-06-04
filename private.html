@@ -153,24 +153,33 @@
     iframe {
       position: absolute;
       border: none;
-      /* Adjust these values to match the black square's size and position in cabinet.png */
-      width: 80%; /* Example: adjust based on the black square's size */
-      height: 80%; /* Example: adjust based on the black square's size */
-      /* Center the iframe; adjust top/left for precise alignment */
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      width: 565px; /* Matches black square width */
+      height: 400px; /* Matches black square height */
+      top: 245px; /* Offset from top */
+      left: 272px; /* Offset from left */
     }
 
     /* Responsive adjustments */
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1073px) {
       .game-container {
         background-size: cover; /* Ensure image fits smaller screens */
       }
 
       iframe {
-        width: 90%; /* Adjust for smaller screens */
-        height: 70%; /* Adjust for smaller screens */
+        /* Scale iframe proportionally based on container width */
+        width: calc(565px * (100vw / 1073));
+        height: calc(400px * (100vw / 1073));
+        top: calc(245px * (100vw / 1073));
+        left: calc(272px * (100vw / 1073));
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      iframe {
+        width: calc(565px * (90vw / 1073)); /* Further adjust for smaller screens */
+        height: calc(400px * (90vw / 1073));
+        top: calc(245px * (90vw / 1073));
+        left: calc(272px * (90vw / 1073));
       }
     }
   </style>
