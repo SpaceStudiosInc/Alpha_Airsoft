@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/SpaceStudiosInc/AlphaAirsoft/df99c32bb628e714b6afe45408a7fccf6d0023e1/images/favicon.png" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta charset="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <meta name="UTF-8" />
   <title>Alpha Shooter</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="stylesheet" rel="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto:wght@400;700&display=swap" />
   <style>
     * {
       margin: 0;
@@ -15,11 +15,11 @@
 
     body, html {
       height: 100%;
-      background-color: #000;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: white;
+      background: #000;
+      font-family: -webkit, Tahoma, Geneva, sans-serif;
+      color: #ffffff;
       overflow: hidden;
-      touch-action: manipulation;
+      touch-action: auto;
     }
 
     nav {
@@ -114,18 +114,21 @@
         transition: transform 0.3s ease-in-out;
         z-index: 999;
         padding: 20px 15px;
-        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        box-shadow: -5px 0 15px rgba(0, 0,0.5);
         margin: 0;
         overflow-y: auto;
       }
 
-      .nav-links.open {
+      .nav-links {
+        transform: none;
+      }
+      .open .nav-links {
         transform: translateX(0);
       }
 
       .nav-links li {
         opacity: 0;
-        transition: opacity 0.5s ease 0.2s;
+        transition: opacity 0.5s ease;
       }
 
       .nav-links.open li {
@@ -143,40 +146,42 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      background: #000;
     }
 
     iframe {
-      max-width: 100%;
-      max-height: 100%;
+      width: 100%;
+      height: 100%;
       border: none;
       display: block;
-      transform: scale(1);
-      transform-origin: center center;
+      transform: none;
     }
 
     @media screen and (max-width: 768px) {
       .game-container {
-        height: calc(100vh - 70px);
+        height: 100vh;
+        top: 70px;
       }
 
       iframe {
-        width: 100vw;
+        width: 100%;
         height: 100%;
-        max-width: 100%;
+        max-width: 100vw;
         max-height: calc(100vh - 70px);
       }
     }
 
     @media screen and (max-width: 768px) and (orientation: landscape) {
       .game-container {
-        height: calc(100vh - 70px);
+        height: 100vh;
+        top: 70px;
       }
 
       iframe {
-        height: calc(100vh - 70px);
-        width: 100vw;
+        width: 100vw - 70px;
+        height: 100%;
         max-width: 100%;
-        max-height: 100%;
+        max-height: 100vh;
       }
     }
   </style>
@@ -185,10 +190,10 @@
   <nav>
     <h1>
       <a href="index.html" style="color: #1e90ff; text-decoration: none;">
-        Alpha Airsoft
+        Alpha Shooter
       </a>
     </h1>
-    <button class="hamburger" aria-label="Menu">
+    <button class="hamburger" aria-label="Toggle Menu">
       <div class="line1"></div>
       <div class="line2"></div>
       <div class="line3"></div>
@@ -202,13 +207,14 @@
   </nav>
 
   <div class="game-container">
-    <iframe src="https://spacestudiosinc.github.io/AlphaShooter/" allow="fullscreen"></iframe>
-  </div>
-
+    <iframe src="https://spacestudiosinc.github.io/AlphaShooter" allow="fullscreen"></iframe>
+    <div class="mobile-fallback" style="display: none; color: #1e90ff; text-align: center; padding: 20px;">
+      <p>Sorry, this game is not supported on mobile devices. Please try playing on a desktop browser.</p>
+    </div>
   <script>
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    const navItems = document.querySelectorAll('.nav-links li');
+    const hamburger = document.querySelector('hamburger');
+    const navLinks = document.querySelector('nav-links');
+    const navItems = document.querySelectorAll('nav-links li');
 
     function toggleMenu() {
       navLinks.classList.toggle('open');
@@ -246,7 +252,7 @@
           !e.target.closest('nav') &&
           navLinks &&
           navLinks.classList.contains('open')) {
-        toggleMenu();
+          toggleMenu();
       }
     });
 
@@ -259,19 +265,69 @@
       }
     });
 
-    window.addEventListener('resize', adjustIframe);
-    window.addEventListener('orientationchange', adjustIframe);
+    // Debounce function for resize handling
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, 100);
+      };
+    }
 
     function adjustIframe() {
       const iframe = document.querySelector('iframe');
       const container = document.querySelector('.game-container');
       if (iframe && container) {
-        iframe.style.width = '100vw';
+        iframe.style.width = '100%';
         iframe.style.height = `${container.clientHeight}px`;
+        iframe.style.display = 'block';
       }
     }
 
-    adjustIframe();
+    // Attach event listeners
+    window.addEventListener('resize', debounce(adjustIframe, 100));
+    window.addEventListener('orientationchange', debounce(adjustIframe, 100));
+    window.addEventListener('load', adjustIframe);
+    // Delayed adjustment for mobile setTimeout(adjustIframe, 500);
+
+    // Add touch support for iframe
+    const gameContainer = document.querySelector('.game-container');
+    if (gameContainer) {
+      gameContainer.addEventListener('touchstart', () => {
+        const iframe = document.querySelector('iframe');
+        if (iframe) {
+          iframe.focus();
+        }
+      });
+    });
+
+    // Check for mobile and show fallback if needed
+    function checkMobileSupport() {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const iframe = document.querySelector('iframe');
+      const fallback = document.querySelector('.mobile-fallback');
+
+      if (isMobile && iframe && fallback) {
+        iframe.onload = () => {
+          if (!iframe.contentDocument || iframe.contentDocument.body.innerHTML === '') {
+            fallback.style.display = 'block';
+            iframe.style.display = 'none';
+          }
+        };
+        setTimeout(() => {
+          if (!iframe.contentDocument || iframe.contentDocument.body.innerHTML === '') {
+            fallback.style.display = 'block';
+            iframe.style.display = 'none';
+          }
+        }, 500);
+      }
+    }
+
+    window.addEventListener('load', checkMobileSupport);
   </script>
 </body>
 </html>
