@@ -111,13 +111,24 @@
       align-items: center;
       overflow: hidden;
       background: #000;
+      padding: 10px;
+    }
+
+    .iframe-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+      border: 2px solid #1e90ff;
+      border-radius: 8px;
       display: block;
+      background: #000;
+      box-shadow: 0 0 20px rgba(30, 144, 255, 0.3);
     }
 
     .loading {
@@ -131,7 +142,6 @@
       pointer-events: none;
     }
 
-    /* Mobile tap indicator */
     .tap-indicator {
       position: fixed;
       top: 10px;
@@ -150,6 +160,38 @@
 
     .tap-indicator.show {
       opacity: 1;
+    }
+
+    .zoom-controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 998;
+    }
+
+    .zoom-btn {
+      width: 50px;
+      height: 50px;
+      background: rgba(30, 144, 255, 0.8);
+      border: 2px solid #1e90ff;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      touch-action: manipulation;
+    }
+
+    .zoom-btn:active {
+      background: rgba(30, 144, 255, 1);
+      transform: scale(0.95);
     }
 
     @media screen and (max-width: 768px) {
@@ -200,13 +242,26 @@
         opacity: 1;
       }
 
-      /* Auto-hide nav on mobile after 3 seconds */
       nav.auto-hide {
         transform: translateY(-100%);
       }
+
+      .game-container {
+        padding: 5px;
+      }
+
+      .zoom-controls {
+        bottom: 10px;
+        right: 10px;
+      }
+
+      .zoom-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+      }
     }
 
-    /* Landscape mobile optimization */
     @media screen and (max-width: 768px) and (orientation: landscape) {
       nav {
         height: 45px;
@@ -232,9 +287,20 @@
         width: 1.5rem;
         height: 0.2rem;
       }
+
+      .zoom-controls {
+        bottom: 5px;
+        right: 5px;
+        gap: 5px;
+      }
+
+      .zoom-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+      }
     }
 
-    /* Desktop - no auto-hide */
     @media screen and (min-width: 769px) {
       .game-container {
         height: calc(100vh - 70px);
@@ -242,6 +308,10 @@
       }
 
       .tap-indicator {
+        display: none;
+      }
+
+      .zoom-controls {
         display: none;
       }
     }
@@ -270,25 +340,125 @@
   </nav>
 
   <div class="game-container">
-    <div class="loading">Loading Alpha Shooter...</div>
-    <iframe 
-      src="https://spacestudiosinc.github.io/AlphaShooter" 
-      allow="fullscreen; accelerometer; gyroscope; gamepad"
-      allowfullscreen
-      title="Alpha Shooter Game"></iframe>
+    <div class="iframe-wrapper">
+      <div class="loading">Loading Alpha Shooter...</div>
+      <iframe 
+        id="gameFrame"
+        src="https://spacestudiosinc.github.io/AlphaShooter" 
+        allow="fullscreen; accelerometer; gyroscope; gamepad"
+        allowfullscreen
+        title="Alpha Shooter Game"></iframe>
+    </div>
+  </div>
+
+  <div class="zoom-controls">
+    <button class="zoom-btn" id="zoomIn" aria-label="Zoom In">+</button>
+    <button class="zoom-btn" id="zoomOut" aria-label="Zoom Out">−</button>
+    <button class="zoom-btn" id="zoomReset" aria-label="Reset Zoom" style="font-size: 16px;">⟲</button>
   </div>
   
   <script>
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
     const navItems = document.querySelectorAll('.nav-links li');
-    const iframe = document.querySelector('iframe');
+    const iframe = document.getElementById('gameFrame');
     const loading = document.querySelector('.loading');
     const navbar = document.getElementById('navbar');
     const tapIndicator = document.querySelector('.tap-indicator');
+    const zoomInBtn = document.getElementById('zoomIn');
+    const zoomOutBtn = document.getElementById('zoomOut');
+    const zoomResetBtn = document.getElementById('zoomReset');
     
     let hideTimeout;
     let hasInteracted = false;
+    let currentScale = 1;
+    const minScale = 0.3;
+    const maxScale = 2;
+    const scaleStep = 0.1;
+
+    // Game dimensions (adjust these based on actual game size)
+    const gameWidth = 1920;  // Assumed game width
+    const gameHeight = 1080; // Assumed game height
+
+    function scaleIframe() {
+      if (!iframe) return;
+
+      const container = document.querySelector('.game-container');
+      const containerWidth = container.clientWidth - 20; // Account for padding
+      const containerHeight = container.clientHeight - 20;
+
+      // Calculate scale to fit entire game
+      const scaleX = containerWidth / gameWidth;
+      const scaleY = containerHeight / gameHeight;
+      const scale = Math.min(scaleX, scaleY, 1) * currentScale; // Don't scale up beyond 1:1 initially
+
+      const scaledWidth = gameWidth * scale;
+      const scaledHeight = gameHeight * scale;
+
+      iframe.style.width = `${gameWidth}px`;
+      iframe.style.height = `${gameHeight}px`;
+      iframe.style.transform = `scale(${scale})`;
+      iframe.style.transformOrigin = 'center center';
+    }
+
+    function updateZoom(delta) {
+      currentScale = Math.max(minScale, Math.min(maxScale, currentScale + delta));
+      scaleIframe();
+    }
+
+    function resetZoom() {
+      currentScale = 1;
+      scaleIframe();
+    }
+
+    // Zoom controls
+    if (zoomInBtn) {
+      zoomInBtn.addEventListener('click', () => updateZoom(scaleStep));
+    }
+
+    if (zoomOutBtn) {
+      zoomOutBtn.addEventListener('click', () => updateZoom(-scaleStep));
+    }
+
+    if (zoomResetBtn) {
+      zoomResetBtn.addEventListener('click', resetZoom);
+    }
+
+    // Pinch to zoom on mobile
+    let initialDistance = 0;
+    let initialScale = 1;
+
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        initialDistance = Math.hypot(
+          e.touches[0].pageX - e.touches[1].pageX,
+          e.touches[0].pageY - e.touches[1].pageY
+        );
+        initialScale = currentScale;
+      }
+
+      // Show navbar on tap at top
+      if (window.innerWidth <= 768 && e.touches.length === 1) {
+        const touchY = e.touches[0].clientY;
+        if (touchY < 80 && navbar.classList.contains('hidden')) {
+          navbar.classList.remove('hidden');
+          startAutoHideTimer();
+        }
+      }
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const currentDistance = Math.hypot(
+          e.touches[0].pageX - e.touches[1].pageX,
+          e.touches[0].pageY - e.touches[1].pageY
+        );
+        const delta = (currentDistance - initialDistance) * 0.01;
+        currentScale = Math.max(minScale, Math.min(maxScale, initialScale + delta));
+        scaleIframe();
+      }
+    }, { passive: false });
 
     // Hide loading indicator when iframe loads
     if (iframe) {
@@ -296,7 +466,7 @@
         if (loading) {
           loading.style.display = 'none';
         }
-        // Start auto-hide timer on mobile after game loads
+        scaleIframe();
         if (window.innerWidth <= 768) {
           startAutoHideTimer();
         }
@@ -313,7 +483,6 @@
           : '';
       });
 
-      // Keep navbar visible when menu is open
       if (navLinks.classList.contains('open')) {
         clearTimeout(hideTimeout);
         navbar.classList.remove('hidden');
@@ -334,7 +503,6 @@
       });
     }
 
-    // Auto-hide navbar on mobile
     function startAutoHideTimer() {
       if (window.innerWidth <= 768 && !navLinks.classList.contains('open')) {
         clearTimeout(hideTimeout);
@@ -355,19 +523,6 @@
       hasInteracted = true;
     }
 
-    // Show navbar on tap at top of screen (mobile)
-    document.addEventListener('touchstart', (e) => {
-      if (window.innerWidth <= 768) {
-        const touchY = e.touches[0].clientY;
-        // If touch is in top 80px of screen and navbar is hidden
-        if (touchY < 80 && navbar.classList.contains('hidden')) {
-          navbar.classList.remove('hidden');
-          startAutoHideTimer();
-        }
-      }
-    });
-
-    // Keep navbar visible on interaction
     navbar.addEventListener('mouseenter', () => {
       clearTimeout(hideTimeout);
       navbar.classList.remove('hidden');
@@ -379,10 +534,10 @@
       }
     });
 
-    // Close menu when clicking outside
     document.addEventListener('click', (e) => {
       if (window.innerWidth <= 768 &&
           !e.target.closest('nav') &&
+          !e.target.closest('.zoom-controls') &&
           navLinks &&
           navLinks.classList.contains('open')) {
         toggleMenu();
@@ -390,8 +545,8 @@
       }
     });
 
-    // Handle resize
     window.addEventListener('resize', () => {
+      scaleIframe();
       if (window.innerWidth > 768) {
         clearTimeout(hideTimeout);
         navbar.classList.remove('hidden');
@@ -400,12 +555,14 @@
       }
     });
 
-    // Prevent zoom on mobile
+    window.addEventListener('orientationchange', () => {
+      setTimeout(scaleIframe, 100);
+    });
+
     document.addEventListener('gesturestart', function (e) {
       e.preventDefault();
     });
 
-    // Prevent double-tap zoom
     let lastTouchEnd = 0;
     document.addEventListener('touchend', function (e) {
       const now = Date.now();
@@ -414,6 +571,9 @@
       }
       lastTouchEnd = now;
     }, false);
+
+    // Initial scale
+    window.addEventListener('load', scaleIframe);
   </script>
 </body>
 </html>
