@@ -3,7 +3,7 @@
 <head>
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/SpaceStudiosInc/AlphaAirsoft/df99c32bb628e714b6afe45408a7fccf6d0023e1/images/favicon.png" />
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Alpha Shooter</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
@@ -24,7 +24,7 @@
 
     nav {
       width: 100%;
-      background: #000;
+      background: rgba(0, 0, 0, 0.95);
       border-bottom: 2px solid #1e90ff;
       padding: 12px 24px;
       display: flex;
@@ -35,6 +35,11 @@
       top: 0;
       left: 0;
       z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    nav.hidden {
+      transform: translateY(-100%);
     }
 
     nav h1 {
@@ -94,16 +99,79 @@
       padding: 0;
     }
 
+    .game-container {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: #000;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #1e90ff;
+      font-size: 18px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Mobile tap indicator */
+    .tap-indicator {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(30, 144, 255, 0.8);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      z-index: 999;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .tap-indicator.show {
+      opacity: 1;
+    }
+
     @media screen and (max-width: 768px) {
       .hamburger {
         display: flex;
       }
 
+      nav {
+        height: 60px;
+        padding: 10px 16px;
+      }
+
+      nav h1 {
+        font-size: 20px;
+      }
+
       .nav-links {
         position: fixed;
-        top: 70px;
+        top: 60px;
         right: 0;
-        height: calc(100vh - 70px);
+        height: calc(100vh - 60px);
+        height: calc(100dvh - 60px);
         width: 70%;
         background: rgba(0, 0, 0, 0.95);
         flex-direction: column;
@@ -131,99 +199,58 @@
       .nav-links.open li {
         opacity: 1;
       }
-    }
 
-    .game-container {
-      width: 100%;
-      height: calc(100vh - 70px);
-      position: absolute;
-      top: 70px;
-      left: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      background: #000;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-      transform: none;
-    }
-
-    /* Loading indicator */
-    .loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #1e90ff;
-      font-size: 18px;
-      z-index: 1;
-    }
-
-    /* Mobile optimization - keep game visible */
-    @media screen and (max-width: 768px) {
-      body, html {
-        touch-action: pan-x pan-y;
-      }
-
-      .game-container {
-        height: calc(100vh - 70px);
-        top: 70px;
-      }
-
-      iframe {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-
-      nav h1 {
-        font-size: 20px;
+      /* Auto-hide nav on mobile after 3 seconds */
+      nav.auto-hide {
+        transform: translateY(-100%);
       }
     }
 
     /* Landscape mobile optimization */
     @media screen and (max-width: 768px) and (orientation: landscape) {
       nav {
-        height: 50px;
-        padding: 8px 16px;
+        height: 45px;
+        padding: 6px 12px;
       }
 
       nav h1 {
-        font-size: 18px;
-      }
-
-      .game-container {
-        height: calc(100vh - 50px);
-        top: 50px;
+        font-size: 16px;
       }
 
       .nav-links {
-        top: 50px;
-        height: calc(100vh - 50px);
+        top: 45px;
+        height: calc(100vh - 45px);
+        height: calc(100dvh - 45px);
+      }
+
+      .hamburger {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .hamburger div {
+        width: 1.5rem;
+        height: 0.2rem;
       }
     }
 
-    /* Tablet optimization */
-    @media screen and (min-width: 769px) and (max-width: 1024px) {
+    /* Desktop - no auto-hide */
+    @media screen and (min-width: 769px) {
       .game-container {
         height: calc(100vh - 70px);
+        top: 70px;
       }
 
-      iframe {
-        width: 100%;
-        height: 100%;
+      .tap-indicator {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
-  <nav>
+  <div class="tap-indicator">Tap top of screen to show menu</div>
+  
+  <nav id="navbar">
     <h1>
       <a href="index.html" style="color: #1e90ff; text-decoration: none;">
         Alpha Shooter
@@ -257,12 +284,21 @@
     const navItems = document.querySelectorAll('.nav-links li');
     const iframe = document.querySelector('iframe');
     const loading = document.querySelector('.loading');
+    const navbar = document.getElementById('navbar');
+    const tapIndicator = document.querySelector('.tap-indicator');
+    
+    let hideTimeout;
+    let hasInteracted = false;
 
     // Hide loading indicator when iframe loads
     if (iframe) {
       iframe.addEventListener('load', () => {
         if (loading) {
           loading.style.display = 'none';
+        }
+        // Start auto-hide timer on mobile after game loads
+        if (window.innerWidth <= 768) {
+          startAutoHideTimer();
         }
       });
     }
@@ -276,6 +312,12 @@
           ? `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`
           : '';
       });
+
+      // Keep navbar visible when menu is open
+      if (navLinks.classList.contains('open')) {
+        clearTimeout(hideTimeout);
+        navbar.classList.remove('hidden');
+      }
     }
 
     if (hamburger) {
@@ -292,6 +334,51 @@
       });
     }
 
+    // Auto-hide navbar on mobile
+    function startAutoHideTimer() {
+      if (window.innerWidth <= 768 && !navLinks.classList.contains('open')) {
+        clearTimeout(hideTimeout);
+        hideTimeout = setTimeout(() => {
+          navbar.classList.add('hidden');
+          if (!hasInteracted) {
+            showTapIndicator();
+          }
+        }, 3000);
+      }
+    }
+
+    function showTapIndicator() {
+      tapIndicator.classList.add('show');
+      setTimeout(() => {
+        tapIndicator.classList.remove('show');
+      }, 3000);
+      hasInteracted = true;
+    }
+
+    // Show navbar on tap at top of screen (mobile)
+    document.addEventListener('touchstart', (e) => {
+      if (window.innerWidth <= 768) {
+        const touchY = e.touches[0].clientY;
+        // If touch is in top 80px of screen and navbar is hidden
+        if (touchY < 80 && navbar.classList.contains('hidden')) {
+          navbar.classList.remove('hidden');
+          startAutoHideTimer();
+        }
+      }
+    });
+
+    // Keep navbar visible on interaction
+    navbar.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      navbar.classList.remove('hidden');
+    });
+
+    navbar.addEventListener('mouseleave', () => {
+      if (window.innerWidth <= 768) {
+        startAutoHideTimer();
+      }
+    });
+
     // Close menu when clicking outside
     document.addEventListener('click', (e) => {
       if (window.innerWidth <= 768 &&
@@ -299,39 +386,34 @@
           navLinks &&
           navLinks.classList.contains('open')) {
         toggleMenu();
+        startAutoHideTimer();
       }
     });
 
-    // Adjust iframe on resize
-    function debounce(func, wait) {
-      let timeout;
-      return function executedFunction(...args) {
-        const later = () => {
-          clearTimeout(timeout);
-          func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, 100);
-      };
-    }
-
-    function adjustIframe() {
-      const iframe = document.querySelector('iframe');
-      const container = document.querySelector('.game-container');
-      if (iframe && container) {
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
+    // Handle resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        clearTimeout(hideTimeout);
+        navbar.classList.remove('hidden');
+      } else {
+        startAutoHideTimer();
       }
-    }
-
-    window.addEventListener('resize', debounce(adjustIframe, 100));
-    window.addEventListener('orientationchange', debounce(adjustIframe, 100));
-    window.addEventListener('load', adjustIframe);
+    });
 
     // Prevent zoom on mobile
     document.addEventListener('gesturestart', function (e) {
       e.preventDefault();
     });
+
+    // Prevent double-tap zoom
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (e) {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
   </script>
 </body>
 </html>
