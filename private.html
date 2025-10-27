@@ -19,7 +19,7 @@
       font-family: -webkit, Tahoma, Geneva, sans-serif;
       color: #ffffff;
       overflow: hidden;
-      touch-action: auto;
+      touch-action: manipulation;
     }
 
     nav {
@@ -154,67 +154,70 @@
       transform: none;
     }
 
-    .mobile-fallback {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
+    /* Loading indicator */
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       color: #1e90ff;
-      width: 100%;
-    }
-
-    .mobile-fallback img {
-      max-width: 100%;
-      height: auto;
-      margin-bottom: 20px;
-    }
-
-    .mobile-fallback button {
-      background: #1e90ff;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
       font-size: 18px;
-      font-weight: 500;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s ease;
+      z-index: 1;
     }
 
-    .mobile-fallback button:hover,
-    .mobile-fallback button:focus {
-      background: rgba(30, 144, 255, 0.8);
-    }
-
+    /* Mobile optimization - keep game visible */
     @media screen and (max-width: 768px) {
+      body, html {
+        touch-action: pan-x pan-y;
+      }
+
       .game-container {
         height: calc(100vh - 70px);
         top: 70px;
       }
 
-      .mobile-fallback {
-        display: flex;
+      iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
 
-      iframe {
-        display: none;
+      nav h1 {
+        font-size: 20px;
       }
     }
 
+    /* Landscape mobile optimization */
     @media screen and (max-width: 768px) and (orientation: landscape) {
-      .game-container {
-        height: calc(100vh - 70px);
-        top: 70px;
+      nav {
+        height: 50px;
+        padding: 8px 16px;
       }
 
-      .mobile-fallback {
-        display: flex;
+      nav h1 {
+        font-size: 18px;
+      }
+
+      .game-container {
+        height: calc(100vh - 50px);
+        top: 50px;
+      }
+
+      .nav-links {
+        top: 50px;
+        height: calc(100vh - 50px);
+      }
+    }
+
+    /* Tablet optimization */
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+      .game-container {
+        height: calc(100vh - 70px);
       }
 
       iframe {
-        display: none;
+        width: 100%;
+        height: 100%;
       }
     }
   </style>
@@ -240,16 +243,29 @@
   </nav>
 
   <div class="game-container">
-    <iframe src="https://spacestudiosinc.github.io/AlphaShooter" allow="fullscreen"></iframe>
-    <div class="mobile-fallback">
-      <img src="images/phonegamebg.png" alt="Alpha Shooter Preview" />
-      <button onclick="window.location.href='index.html'">Back to Home</button>
-    </div>
+    <div class="loading">Loading Alpha Shooter...</div>
+    <iframe 
+      src="https://spacestudiosinc.github.io/AlphaShooter" 
+      allow="fullscreen; accelerometer; gyroscope; gamepad"
+      allowfullscreen
+      title="Alpha Shooter Game"></iframe>
   </div>
+  
   <script>
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
     const navItems = document.querySelectorAll('.nav-links li');
+    const iframe = document.querySelector('iframe');
+    const loading = document.querySelector('.loading');
+
+    // Hide loading indicator when iframe loads
+    if (iframe) {
+      iframe.addEventListener('load', () => {
+        if (loading) {
+          loading.style.display = 'none';
+        }
+      });
+    }
 
     function toggleMenu() {
       navLinks.classList.toggle('open');
@@ -264,7 +280,6 @@
 
     if (hamburger) {
       hamburger.addEventListener('click', toggleMenu);
-      hamburger.addEventListener('touchstart', toggleMenu);
     }
 
     if (navItems) {
@@ -274,14 +289,10 @@
             toggleMenu();
           }
         });
-        link.addEventListener('touchstart', () => {
-          if (window.innerWidth <= 768) {
-            toggleMenu();
-          }
-        });
       });
     }
 
+    // Close menu when clicking outside
     document.addEventListener('click', (e) => {
       if (window.innerWidth <= 768 &&
           !e.target.closest('nav') &&
@@ -291,16 +302,7 @@
       }
     });
 
-    document.addEventListener('touchstart', (e) => {
-      if (window.innerWidth <= 768 &&
-          !e.target.closest('nav') &&
-          navLinks &&
-          navLinks.classList.contains('open')) {
-        toggleMenu();
-      }
-    });
-
-    // Debounce function for resize handling
+    // Adjust iframe on resize
     function debounce(func, wait) {
       let timeout;
       return function executedFunction(...args) {
@@ -316,17 +318,20 @@
     function adjustIframe() {
       const iframe = document.querySelector('iframe');
       const container = document.querySelector('.game-container');
-      if (iframe && container && window.innerWidth > 768) {
+      if (iframe && container) {
         iframe.style.width = '100%';
-        iframe.style.height = `${container.clientHeight}px`;
-        iframe.style.display = 'block';
+        iframe.style.height = '100%';
       }
     }
 
-    // Attach event listeners
     window.addEventListener('resize', debounce(adjustIframe, 100));
     window.addEventListener('orientationchange', debounce(adjustIframe, 100));
     window.addEventListener('load', adjustIframe);
+
+    // Prevent zoom on mobile
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
+    });
   </script>
 </body>
 </html>
