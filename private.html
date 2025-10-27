@@ -3,7 +3,7 @@
 <head>
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/SpaceStudiosInc/AlphaAirsoft/df99c32bb628e714b6afe45408a7fccf6d0023e1/images/favicon.png" />
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
   <title>Alpha Shooter</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
@@ -24,7 +24,7 @@
 
     nav {
       width: 100%;
-      background: rgba(0, 0, 0, 0.95);
+      background: #000;
       border-bottom: 2px solid #1e90ff;
       padding: 12px 24px;
       display: flex;
@@ -35,11 +35,6 @@
       top: 0;
       left: 0;
       z-index: 1000;
-      transition: transform 0.3s ease;
-    }
-
-    nav.hidden {
-      transform: translateY(-100%);
     }
 
     nav h1 {
@@ -99,121 +94,16 @@
       padding: 0;
     }
 
-    .game-container {
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      background: #000;
-      padding: 10px;
-    }
-
-    .iframe-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    iframe {
-      border: 2px solid #1e90ff;
-      border-radius: 8px;
-      display: block;
-      background: #000;
-      box-shadow: 0 0 20px rgba(30, 144, 255, 0.3);
-    }
-
-    .loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #1e90ff;
-      font-size: 18px;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .tap-indicator {
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(30, 144, 255, 0.8);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-      z-index: 999;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .tap-indicator.show {
-      opacity: 1;
-    }
-
-    .zoom-controls {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 998;
-    }
-
-    .zoom-btn {
-      width: 50px;
-      height: 50px;
-      background: rgba(30, 144, 255, 0.8);
-      border: 2px solid #1e90ff;
-      border-radius: 50%;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      touch-action: manipulation;
-    }
-
-    .zoom-btn:active {
-      background: rgba(30, 144, 255, 1);
-      transform: scale(0.95);
-    }
-
     @media screen and (max-width: 768px) {
       .hamburger {
         display: flex;
       }
 
-      nav {
-        height: 60px;
-        padding: 10px 16px;
-      }
-
-      nav h1 {
-        font-size: 20px;
-      }
-
       .nav-links {
         position: fixed;
-        top: 60px;
+        top: 70px;
         right: 0;
-        height: calc(100vh - 60px);
-        height: calc(100dvh - 60px);
+        height: calc(100vh - 70px);
         width: 70%;
         background: rgba(0, 0, 0, 0.95);
         flex-direction: column;
@@ -241,86 +131,99 @@
       .nav-links.open li {
         opacity: 1;
       }
-
-      nav.auto-hide {
-        transform: translateY(-100%);
-      }
-
-      .game-container {
-        padding: 5px;
-      }
-
-      .zoom-controls {
-        bottom: 10px;
-        right: 10px;
-      }
-
-      .zoom-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 20px;
-      }
     }
 
-    @media screen and (max-width: 768px) and (orientation: landscape) {
-      nav {
-        height: 45px;
-        padding: 6px 12px;
-      }
-
-      nav h1 {
-        font-size: 16px;
-      }
-
-      .nav-links {
-        top: 45px;
-        height: calc(100vh - 45px);
-        height: calc(100dvh - 45px);
-      }
-
-      .hamburger {
-        width: 1.5rem;
-        height: 1.5rem;
-      }
-
-      .hamburger div {
-        width: 1.5rem;
-        height: 0.2rem;
-      }
-
-      .zoom-controls {
-        bottom: 5px;
-        right: 5px;
-        gap: 5px;
-      }
-
-      .zoom-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-      }
+    .game-container {
+      width: 100%;
+      height: calc(100vh - 70px);
+      position: absolute;
+      top: 70px;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: #000;
     }
 
-    @media screen and (min-width: 769px) {
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      transform: none;
+    }
+
+    /* Loading indicator */
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #1e90ff;
+      font-size: 18px;
+      z-index: 1;
+    }
+
+    /* Mobile optimization - keep game visible */
+    @media screen and (max-width: 768px) {
+      body, html {
+        touch-action: pan-x pan-y;
+      }
+
       .game-container {
         height: calc(100vh - 70px);
         top: 70px;
       }
 
-      .tap-indicator {
-        display: none;
+      iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
 
-      .zoom-controls {
-        display: none;
+      nav h1 {
+        font-size: 20px;
+      }
+    }
+
+    /* Landscape mobile optimization */
+    @media screen and (max-width: 768px) and (orientation: landscape) {
+      nav {
+        height: 50px;
+        padding: 8px 16px;
+      }
+
+      nav h1 {
+        font-size: 18px;
+      }
+
+      .game-container {
+        height: calc(100vh - 50px);
+        top: 50px;
+      }
+
+      .nav-links {
+        top: 50px;
+        height: calc(100vh - 50px);
+      }
+    }
+
+    /* Tablet optimization */
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+      .game-container {
+        height: calc(100vh - 70px);
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
       }
     }
   </style>
 </head>
 <body>
-  <div class="tap-indicator">Tap top of screen to show menu</div>
-  
-  <nav id="navbar">
+  <nav>
     <h1>
       <a href="index.html" style="color: #1e90ff; text-decoration: none;">
         Alpha Shooter
@@ -340,135 +243,26 @@
   </nav>
 
   <div class="game-container">
-    <div class="iframe-wrapper">
-      <div class="loading">Loading Alpha Shooter...</div>
-      <iframe 
-        id="gameFrame"
-        src="https://spacestudiosinc.github.io/AlphaShooter" 
-        allow="fullscreen; accelerometer; gyroscope; gamepad"
-        allowfullscreen
-        title="Alpha Shooter Game"></iframe>
-    </div>
-  </div>
-
-  <div class="zoom-controls">
-    <button class="zoom-btn" id="zoomIn" aria-label="Zoom In">+</button>
-    <button class="zoom-btn" id="zoomOut" aria-label="Zoom Out">−</button>
-    <button class="zoom-btn" id="zoomReset" aria-label="Reset Zoom" style="font-size: 16px;">⟲</button>
+    <div class="loading">Loading Alpha Shooter...</div>
+    <iframe 
+      src="https://spacestudiosinc.github.io/AlphaShooter" 
+      allow="fullscreen; accelerometer; gyroscope; gamepad"
+      allowfullscreen
+      title="Alpha Shooter Game"></iframe>
   </div>
   
   <script>
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
     const navItems = document.querySelectorAll('.nav-links li');
-    const iframe = document.getElementById('gameFrame');
+    const iframe = document.querySelector('iframe');
     const loading = document.querySelector('.loading');
-    const navbar = document.getElementById('navbar');
-    const tapIndicator = document.querySelector('.tap-indicator');
-    const zoomInBtn = document.getElementById('zoomIn');
-    const zoomOutBtn = document.getElementById('zoomOut');
-    const zoomResetBtn = document.getElementById('zoomReset');
-    
-    let hideTimeout;
-    let hasInteracted = false;
-    let currentScale = 1;
-    const minScale = 0.3;
-    const maxScale = 2;
-    const scaleStep = 0.1;
-
-    // Game dimensions (adjust these based on actual game size)
-    const gameWidth = 1920;  // Assumed game width
-    const gameHeight = 1080; // Assumed game height
-
-    function scaleIframe() {
-      if (!iframe) return;
-
-      const container = document.querySelector('.game-container');
-      const containerWidth = container.clientWidth - 20; // Account for padding
-      const containerHeight = container.clientHeight - 20;
-
-      // Calculate scale to fit entire game
-      const scaleX = containerWidth / gameWidth;
-      const scaleY = containerHeight / gameHeight;
-      const scale = Math.min(scaleX, scaleY, 1) * currentScale; // Don't scale up beyond 1:1 initially
-
-      const scaledWidth = gameWidth * scale;
-      const scaledHeight = gameHeight * scale;
-
-      iframe.style.width = `${gameWidth}px`;
-      iframe.style.height = `${gameHeight}px`;
-      iframe.style.transform = `scale(${scale})`;
-      iframe.style.transformOrigin = 'center center';
-    }
-
-    function updateZoom(delta) {
-      currentScale = Math.max(minScale, Math.min(maxScale, currentScale + delta));
-      scaleIframe();
-    }
-
-    function resetZoom() {
-      currentScale = 1;
-      scaleIframe();
-    }
-
-    // Zoom controls
-    if (zoomInBtn) {
-      zoomInBtn.addEventListener('click', () => updateZoom(scaleStep));
-    }
-
-    if (zoomOutBtn) {
-      zoomOutBtn.addEventListener('click', () => updateZoom(-scaleStep));
-    }
-
-    if (zoomResetBtn) {
-      zoomResetBtn.addEventListener('click', resetZoom);
-    }
-
-    // Pinch to zoom on mobile
-    let initialDistance = 0;
-    let initialScale = 1;
-
-    document.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 2) {
-        initialDistance = Math.hypot(
-          e.touches[0].pageX - e.touches[1].pageX,
-          e.touches[0].pageY - e.touches[1].pageY
-        );
-        initialScale = currentScale;
-      }
-
-      // Show navbar on tap at top
-      if (window.innerWidth <= 768 && e.touches.length === 1) {
-        const touchY = e.touches[0].clientY;
-        if (touchY < 80 && navbar.classList.contains('hidden')) {
-          navbar.classList.remove('hidden');
-          startAutoHideTimer();
-        }
-      }
-    });
-
-    document.addEventListener('touchmove', (e) => {
-      if (e.touches.length === 2) {
-        e.preventDefault();
-        const currentDistance = Math.hypot(
-          e.touches[0].pageX - e.touches[1].pageX,
-          e.touches[0].pageY - e.touches[1].pageY
-        );
-        const delta = (currentDistance - initialDistance) * 0.01;
-        currentScale = Math.max(minScale, Math.min(maxScale, initialScale + delta));
-        scaleIframe();
-      }
-    }, { passive: false });
 
     // Hide loading indicator when iframe loads
     if (iframe) {
       iframe.addEventListener('load', () => {
         if (loading) {
           loading.style.display = 'none';
-        }
-        scaleIframe();
-        if (window.innerWidth <= 768) {
-          startAutoHideTimer();
         }
       });
     }
@@ -482,11 +276,6 @@
           ? `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`
           : '';
       });
-
-      if (navLinks.classList.contains('open')) {
-        clearTimeout(hideTimeout);
-        navbar.classList.remove('hidden');
-      }
     }
 
     if (hamburger) {
@@ -503,77 +292,46 @@
       });
     }
 
-    function startAutoHideTimer() {
-      if (window.innerWidth <= 768 && !navLinks.classList.contains('open')) {
-        clearTimeout(hideTimeout);
-        hideTimeout = setTimeout(() => {
-          navbar.classList.add('hidden');
-          if (!hasInteracted) {
-            showTapIndicator();
-          }
-        }, 3000);
-      }
-    }
-
-    function showTapIndicator() {
-      tapIndicator.classList.add('show');
-      setTimeout(() => {
-        tapIndicator.classList.remove('show');
-      }, 3000);
-      hasInteracted = true;
-    }
-
-    navbar.addEventListener('mouseenter', () => {
-      clearTimeout(hideTimeout);
-      navbar.classList.remove('hidden');
-    });
-
-    navbar.addEventListener('mouseleave', () => {
-      if (window.innerWidth <= 768) {
-        startAutoHideTimer();
-      }
-    });
-
+    // Close menu when clicking outside
     document.addEventListener('click', (e) => {
       if (window.innerWidth <= 768 &&
           !e.target.closest('nav') &&
-          !e.target.closest('.zoom-controls') &&
           navLinks &&
           navLinks.classList.contains('open')) {
         toggleMenu();
-        startAutoHideTimer();
       }
     });
 
-    window.addEventListener('resize', () => {
-      scaleIframe();
-      if (window.innerWidth > 768) {
-        clearTimeout(hideTimeout);
-        navbar.classList.remove('hidden');
-      } else {
-        startAutoHideTimer();
+    // Adjust iframe on resize
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, 100);
+      };
+    }
+
+    function adjustIframe() {
+      const iframe = document.querySelector('iframe');
+      const container = document.querySelector('.game-container');
+      if (iframe && container) {
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
       }
-    });
+    }
 
-    window.addEventListener('orientationchange', () => {
-      setTimeout(scaleIframe, 100);
-    });
+    window.addEventListener('resize', debounce(adjustIframe, 100));
+    window.addEventListener('orientationchange', debounce(adjustIframe, 100));
+    window.addEventListener('load', adjustIframe);
 
+    // Prevent zoom on mobile
     document.addEventListener('gesturestart', function (e) {
       e.preventDefault();
     });
-
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', function (e) {
-      const now = Date.now();
-      if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
-      }
-      lastTouchEnd = now;
-    }, false);
-
-    // Initial scale
-    window.addEventListener('load', scaleIframe);
   </script>
 </body>
 </html>
