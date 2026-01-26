@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>Location - Alpha Airsoft</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600;700&family=Orbitron:wght@600;900&display=swap" rel="stylesheet" />
+<style>
+/* Map zone styles */
+/* Spawn zones - blue outline by default */
+.map-zone[data-zone="Red Spawn"] {
+  fill: transparent;
+  stroke: rgba(30, 144, 255, 0.8);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.map-zone[data-zone="Red Spawn"]:hover {
+  fill: rgba(255, 0, 0, 0.9);
+  stroke: rgba(255, 0, 0, 1);
+}
+
+.map-zone[data-zone="Blue Spawn"] {
+  fill: transparent;
+  stroke: rgba(30, 144, 255, 0.8);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.map-zone[data-zone="Blue Spawn"]:hover {
+  fill: rgba(0, 0, 255, 0.9);
+  stroke: rgba(0, 0, 255, 1);
+}
+
+/* Zone-specific colors - blue outline by default */
+.map-zone[data-zone="Center Woods"] {
+  fill: transparent;
+  stroke: rgba(30, 144, 255, 0.8);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.map-zone[data-zone="Center Woods"]:hover {
+  fill: rgba(100, 196, 255, 0.9);
+  stroke: rgba(100, 196, 255, 1);
+}
+
+.map-zone[data-zone="North Woods"] {
+  fill: transparent;
+  stroke: rgba(30, 144, 255, 0.8);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.map-zone[data-zone="North Woods"]:hover {
+  fill: rgba(19, 137, 216, 0.9);
+  stroke: rgba(19, 137, 216, 1);
+}
+
+.map-zone[data-zone="South Woods"] {
+  fill: transparent;
+  stroke: rgba(30, 144, 255, 0.8);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.map-zone[data-zone="South Woods"]:hover {
+  fill: rgba(199, 57, 255, 0.9);
+  stroke: rgba(199, 57, 255, 1);
+}
+
+.map-zone[data-zone="Castle"] {
+  fill: transparent;
+  stroke: rgba(30, 144, 255, 0.8);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.map-zone[data-zone="Castle"]:hover {
+  fill: rgba(255, 255, 255, 0.9);
+  stroke: rgba(255, 255, 255, 1);
+}
+
+.map-zone[data-zone="Forest"] {
+  fill: transparent;
+  stroke: rgba(30, 144, 255, 0.8);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.map-zone[data-zone="Forest"]:hover {
+  fill: rgba(0, 255, 106, 0.9);
+  stroke: rgba(0, 255, 106, 1);
+}
+
+.map-zone[data-zone="Kill House"] {
+  fill: transparent;
+  stroke: rgba(30, 144, 255, 0.8);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.map-zone[data-zone="Kill House"]:hover {
+  fill: rgba(255, 25, 0, 0.9);
+  stroke: rgba(255, 25, 0, 1);
+}
+
+.map-zone[data-zone="North Buildings"] {
+  fill: transparent;
+  stroke: rgba(30, 144, 255, 0.8);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.map-zone[data-zone="North Buildings"]:hover {
+  fill: rgba(243, 156, 18, 0.9);
+  stroke: rgba(243, 156, 18, 1);
+}
+
+.map-zone[data-zone="No Man's Land"] {
+  fill: transparent;
+  stroke: rgba(30, 144, 255, 0.8);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.map-zone[data-zone="No Man's Land"]:hover {
+  fill: rgba(225, 255, 0, 0.9);
+  stroke: rgba(225, 255, 0, 1);
+}
+
+/* Hover and active states */
+.map-zone[data-zone="Red Spawn"]:hover,
+.map-zone[data-zone="Red Spawn"].active {
+  fill: rgba(255, 0, 0, 0.4);
+}
+
+.map-zone[data-zone="Blue Spawn"]:hover,
+.map-zone[data-zone="Blue Spawn"].active {
+  fill: rgba(0, 0, 255, 0.4);
+}
+
+.map-zone[data-zone]:not([data-zone="Red Spawn"]):not([data-zone="Blue Spawn"]):hover,
+.map-zone[data-zone]:not([data-zone="Red Spawn"]):not([data-zone="Blue Spawn"]).active {
+  opacity: 0.3;
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+:root {
+--primary: #1e90ff;
+--primary-glow: rgba(30, 144, 255, 0.3);
+--bg-dark: #000000;
+}
+body {
+background: var(--bg-dark);
+color: white;
+font-family: 'Rajdhani', sans-serif;
+overflow-x: hidden;
+perspective: 1400px;
+}
+
+
+.parallax-container {
+position: fixed;
+inset: 0;
+overflow: hidden;
+z-index: 1;
+}
+
+/* Photo field background - sits above black, below grid */
+.field-image {
+position: absolute;
+inset: 0;
+background-image: url('photo field.png');
+background-size: cover;
+background-position: center;
+opacity: 0.25;
+will-change: transform;
+z-index: 1;
+transform-style: preserve-3d;
+}
+.field-image::after {
+content: '';
+position: absolute;
+inset: 0;
+background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(30,144,255,0.14) 0%, transparent 55%);
+pointer-events: none;
+z-index: 4;
+opacity: 0.25;
+transition: opacity 0.6s ease;
+}
+
+/* Grid overlay - sits above photo field */
+.grid-overlay {
+position: absolute;
+inset: 0;
+opacity: 1;
+width: 100%;
+height: 200%;
+background-image: 
+linear-gradient(to right, rgba(30,144,255,0.09) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(30,144,255,0.09) 1px, transparent 1px);
+background-size: 60px 60px;
+pointer-events: none;
+z-index: 2;
+will-change: transform, opacity;
+animation: gridDrift 28s linear infinite;
+}
+@keyframes gridDrift {
+0%   { transform: translateY(0); }
+100% { transform: translateY(-50%); }
+}
+
+nav {
+position: fixed;
+top: 0;
+width: 100%;
+background: rgba(0, 0, 0, 0.9);
+backdrop-filter: blur(20px);
+border-bottom: 1px solid rgba(30, 144, 255, 0.3);
+padding: 1.2rem 4%;
+display: flex;
+align-items: center;
+justify-content: space-between;
+z-index: 1000;
+}
+.logo {
+font-family: 'Orbitron', sans-serif;
+font-size: 1.8rem;
+font-weight: 900;
+color: var(--primary);
+letter-spacing: 2px;
+text-decoration: none;
+text-shadow: 0 0 20px var(--primary-glow);
+transition: all 0.3s;
+}
+.logo:hover {
+text-shadow: 0 0 30px var(--primary-glow), 0 0 40px var(--primary-glow);
+}
+.nav-links {
+display: flex;
+gap: 2rem;
+list-style: none;
+align-items: center;
+}
+.nav-links a {
+color: white;
+text-decoration: none;
+font-size: 0.95rem;
+font-weight: 600;
+letter-spacing: 1px;
+text-transform: uppercase;
+padding: 0.6rem 1.2rem;
+position: relative;
+transition: all 0.3s;
+}
+.nav-links a::before {
+content: '';
+position: absolute;
+bottom: 0;
+left: 50%;
+width: 0;
+height: 2px;
+background: var(--primary);
+transform: translateX(-50%);
+transition: width 0.3s;
+}
+.nav-links a:hover::before,
+.nav-links a.active::before {
+width: 80%;
+}
+.nav-links a:hover,
+.nav-links a.active {
+color: var(--primary);
+}
+.hamburger {
+display: none;
+flex-direction: column;
+gap: 5px;
+background: transparent;
+border: none;
+cursor: pointer;
+padding: 0.5rem;
+}
+.hamburger div {
+width: 25px;
+height: 2px;
+background: var(--primary);
+transition: all 0.3s;
+border-radius: 2px;
+}
+.time-display {
+font-family: 'Orbitron', sans-serif;
+font-size: 0.9rem;
+color: var(--primary);
+letter-spacing: 2px;
+font-variant-numeric: tabular-nums;
+}
+.content {
+position: relative;
+z-index: 10;
+min-height: 100vh;
+padding: 120px 4% 4rem;
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+.section-header {
+margin-bottom: 4rem;
+animation: fadeInUp 0.6s ease-out;
+}
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(30px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+.section-number {
+font-size: 0.9rem;
+color: var(--primary);
+letter-spacing: 3px;
+margin-bottom: 0.5rem;
+opacity: 0.7;
+}
+.section-title {
+font-family: 'Orbitron', sans-serif;
+font-size: clamp(2.5rem, 6vw, 4rem);
+font-weight: 900;
+letter-spacing: -1px;
+}
+.map-container {
+width: 70%;
+max-width: none;
+margin: 0 auto;
+background: rgba(0, 0, 0, 0.8);
+border: 1px solid rgba(30, 144, 255, 0.2);
+padding: 2rem;
+border-radius: 8px;
+box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+animation: fadeInUp 0.8s ease-out 0.2s both;
+position: relative;
+overflow: hidden;
+}
+.map-wrapper {
+position: relative;
+width: 100%;
+aspect-ratio: 1809 / 2160;
+background: #111;
+border-radius: 4px;
+overflow: hidden;
+}
+.map-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+}
+.svg-overlay {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+}
+.map-zone {
+fill: rgba(30, 144, 255, 0.02);
+stroke: rgba(30, 144, 255, 0.5);
+stroke-width: 2;
+transition: all 0.3s ease;
+}
+.map-zone:hover {
+fill: rgba(30, 144, 255, 0.35);
+stroke: rgba(30, 144, 255, 0.9);
+filter: drop-shadow(0 0 15px rgba(30, 144, 255, 0.6));
+}
+.zone-tooltip {
+position: fixed;
+background: rgba(10, 10, 10, 0.95);
+color: white;
+padding: 12px 16px;
+border-radius: 4px;
+font-size: 14px;
+pointer-events: none;
+opacity: 0;
+z-index: 100;
+border: 2px solid var(--primary);
+box-shadow: 0 0 20px rgba(30, 144, 255, 0.6);
+font-weight: 600;
+letter-spacing: 1px;
+white-space: nowrap;
+transition: opacity 0.2s ease;
+}
+.zone-tooltip.show {
+opacity: 1;
+}
+.map-legend {
+position: absolute;
+bottom: 20px;
+right: 20px;
+background: rgba(10, 10, 10, 0.8);
+padding: 15px;
+border-radius: 4px;
+border: 1px solid rgba(30, 144, 255, 0.3);
+z-index: 5;
+font-size: 13px;
+}
+.legend-item {
+display: flex;
+align-items: center;
+margin: 8px 0;
+}
+.legend-color {
+width: 16px;
+height: 16px;
+margin-right: 8px;
+border: 1px solid rgba(30, 144, 255, 0.6);
+background: rgba(30, 144, 255, 0.1);
+}
+.info-section {
+margin-top: 2rem;
+padding: 1.5rem;
+background: rgba(0, 0, 0, 0.7);
+border-radius: 4px;
+border-left: 3px solid var(--primary);
+}
+.info-section h3 {
+color: var(--primary);
+margin-bottom: 1rem;
+font-family: 'Orbitron', sans-serif;
+}
+.info-section p {
+margin: 0.8rem 0;
+opacity: 0.9;
+}
+.info-highlight {
+color: var(--primary);
+font-weight: 600;
+}
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+  
+  .hamburger { 
+    display: flex;
+    z-index: 1001;
+  }
+  
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 80%;
+    max-width: 300px;
+    background: rgba(10, 10, 10, 0.98);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 2rem 1rem;
+    margin: 0;
+    z-index: 1000;
+  }
+  
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+    margin: 0.5rem 0;
+  }
+  
+  .nav-links a {
+    display: block;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .nav-links.open { 
+    transform: translateX(0);
+  }
+  
+  .hamburger.open div:nth-child(1) { 
+    transform: rotate(45deg) translate(5px, 5px); 
+  }
+  .hamburger.open div:nth-child(2) { 
+    opacity: 0; 
+  }
+  .hamburger.open div:nth-child(3) { 
+    transform: rotate(-45deg) translate(7px, -6px); 
+  }
+  
+  .time-display { 
+    display: none; 
+  }
+  
+  .content {
+    padding: 5rem 1rem 2rem;
+  }
+  
+  .section-header {
+    margin-bottom: 2rem;
+  }
+  
+  .section-title {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+  }
+  
+  .section-number {
+    font-size: 0.85rem;
+  }
+  
+  .map-container {
+    width: 90%;
+    padding: 1rem;
+    margin: 0 auto;
+    border-radius: 0;
+  }
+  
+  .map-wrapper {
+    border-radius: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+  }
+  
+  .map-image {
+    min-width: 800px;
+    height: auto;
+  }
+  
+  .svg-overlay {
+    min-width: 800px;
+    height: auto;
+  }
+  
+  .zone-tooltip {
+    display: none;
+  }
+  
+  .map-legend {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    margin-top: 1rem;
+    width: 100%;
+    font-size: 0.85rem;
+  }
+  
+  .map-legend-item {
+    padding: 0.5rem;
+    min-height: 32px;
+  }
+  
+  .info-section {
+    margin: 1rem -1rem -1rem;
+    border-radius: 0;
+    border-left: none;
+    border-top: 3px solid var(--primary);
+    padding: 1rem;
+  }
+  
+  .field-image {
+    opacity: 0.5;
+  }
+}
+
+/* Tablet Styles */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+  
+  .map-container {
+    padding: 1.5rem;
+  }
+  
+  .map-wrapper {
+    border-radius: 6px;
+  }
+  
+  .map-legend {
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Mobile Devices */
+@media screen and (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+  
+  .logo {
+    font-size: 1.4rem;
+  }
+  
+  nav {
+    padding: 1rem 3%;
+  }
+  
+  .nav-links {
+    width: 90%;
+  }
+  
+  .content {
+    padding: 4.5rem 0.5rem 1.5rem;
+  }
+  
+  .section-title {
+    font-size: clamp(1.5rem, 8vw, 2rem);
+  }
+  
+  .section-number {
+    font-size: 0.75rem;
+  }
+  
+  .map-container {
+    width: 95%;
+    padding: 0.5rem;
+    margin: 0 auto;
+  }
+  
+  .map-wrapper {
+    border-radius: 2px;
+  }
+  
+  .map-image {
+    min-width: 600px;
+  }
+  
+  .svg-overlay {
+    min-width: 600px;
+  }
+  
+  .map-legend {
+    font-size: 0.75rem;
+  }
+  
+  .map-legend-item {
+    padding: 0.4rem;
+    min-height: 28px;
+  }
+  
+  .info-section {
+    margin: 0.5rem -0.5rem -0.5rem;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+</style>
+</head>
+<body>
+<!-- Background layers: Black → Photo Field → Grid → Content -->
+<div class="parallax-container">
+<div class="field-image" id="fieldImage"></div>
+<div class="grid-overlay" id="grid"></div>
+</div>
+
+<nav>
+<a href="index.html" class="logo">ALPHA AIRSOFT</a>
+<button class="hamburger" aria-label="Menu">
+<div></div>
+<div></div>
+<div></div>
+</button>
+<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="shop.html">Clayton Approved</a></li>
+<li><a href="map.html" class="active">Map</a></li>
+<li><a href="signup.html">Waivers</a></li>
+<li class="time-display" id="clock">00:00:00</li>
+</ul>
+</nav>
+
+<div class="zone-tooltip" id="tooltip"></div>
+
+<div class="content">
+<div class="section-header">
+<div class="section-number">02 — LOCATION</div>
+<h2 class="section-title">Our Field</h2>
+</div>
+<div class="map-container">
+<div class="map-wrapper" id="mapWrapper">
+<img src="Map.png" alt="Alpha Airsoft Map" class="map-image" id="mapImage">
+<svg class="svg-overlay" id="svgOverlay" preserveAspectRatio="none">
+<!-- Zone 1: Red Spawn -->
+<polygon class="map-zone" data-zone="Red Spawn" points="450,355 559,76 909,70 909,355" />
+
+<!-- Zone 2: Center Woods -->
+<polygon class="map-zone" data-zone="Center Woods" points="904,171 904,570 1260,570 1259,171" />
+
+<!-- Zone 3: North Woods -->
+<polygon class="map-zone" data-zone="North Woods" points="1260,180 1260,570 1686,570 1686,180" />
+
+<!-- Zone 4: South Woods -->
+<polygon class="map-zone" data-zone="South Woods" points="900,355 475,355 359,757 900,757" />
+
+<!-- Zone 5: Castle -->
+<polygon class="map-zone" data-zone="Castle" points="897,756 898,1070 258,1033 360,756" />
+
+<!-- Zone 6: Forest -->
+<polygon class="map-zone" data-zone="Forest" points="245,1039 107,1373 1073,1803 1078,1080" />
+
+<!-- Zone 7: Kill House -->
+<polygon class="map-zone" data-zone="Kill House" points="905,577 905,1069 1329,1073 1339,578" />
+
+<!-- Zone 8: North Buildings -->
+<polygon class="map-zone" data-zone="North Buildings" points="1333,576 1333,1078 1763,1081 1700,574" />
+
+<!-- Zone 9: No Man's Land -->
+<polygon class="map-zone" data-zone="No Man's Land" points="1082,1079 1081,1847 1475,1852 1763,1512 1477,1508 1476,1257 1797,1260 1798,1080" />
+
+<!-- Zone 10: Blue Spawn -->
+<polygon class="map-zone" data-zone="Blue Spawn" points="1799,1261 1476,1260 1472,1512 1799,1502" />
+</svg>
+</div>
+
+<div class="info-section">
+<h3>Alpha Airsoft</h3>
+<p><span class="info-highlight">📍</span> 35°19'43.9"N 94°20'35.0"W, Fort Smith, AR 72901</p>
+<div style="margin-top: 1.5rem; opacity: 0.8; font-size: 0.9rem;">
+<p>📧 info@alphaairsoft.com</p>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const fieldImg = document.getElementById('fieldImage');
+  const grid = document.getElementById('grid');
+  const isMobile = window.innerWidth <= 768;
+
+  let mouse = { x: 0, y: 0 };
+  let target = { x: 0, y: 0, tx: 0, ty: 0, scale: 1 };
+  let current = { x: 0, y: 0, tx: 0, ty: 0, scale: 1, gridX: 0, gridY: 0 };
+  let scrollY = 0;
+
+  window.addEventListener('scroll', () => {
+    scrollY = window.scrollY;
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (isMobile) return;
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
+
+    fieldImg.style.setProperty('--mx', `${e.clientX}px`);
+    fieldImg.style.setProperty('--my', `${e.clientY}px`);
+  });
+
+  function raf() {
+    if (!isMobile) {
+      target.x = mouse.x * 30;
+      target.y = mouse.y * 30;
+      target.tx = -mouse.y * 11;
+      target.ty =  mouse.x * 14;
+      const dist = Math.hypot(mouse.x, mouse.y);
+      target.scale = 1 + dist * 0.035;
+
+      target.gridX = mouse.x * 38;
+      target.gridY = mouse.y * 25;
+    }
+
+    const ease = 0.065;
+    const gridEase = 0.055;
+
+    current.x += (target.x - current.x) * ease;
+    current.y += (target.y - current.y) * ease;
+    current.tx += (target.tx - current.tx) * ease * 0.8;
+    current.ty += (target.ty - current.ty) * ease * 0.8;
+    current.scale += (target.scale - current.scale) * ease * 0.5;
+
+    current.gridX += (target.gridX - current.gridX) * gridEase;
+    current.gridY += (target.gridY - current.gridY) * gridEase;
+
+    grid.style.opacity = '1';
+
+    const scrollShift = -scrollY * 0.22;
+    fieldImg.style.transform = 
+      `translate3d(${current.x.toFixed(2)}px, ${current.y.toFixed(2)}px, 0px) ` +
+      `rotateX(${current.tx.toFixed(2)}deg) rotateY(${current.ty.toFixed(2)}deg) ` +
+      `scale(${current.scale.toFixed(4)}) ` +
+      `translateY(${scrollShift}px)`;
+
+    grid.style.transform = `translate(${current.gridX.toFixed(2)}px, ${current.gridY.toFixed(2)}px)`;
+
+    requestAnimationFrame(raf);
+  }
+  raf();
+
+  const hamburger = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-links');
+  const navItems = document.querySelectorAll('.nav-links a');
+
+  const toggleMenu = () => {
+    navLinks.classList.toggle('open');
+    hamburger.classList.toggle('open');
+    document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+  };
+
+  hamburger?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        toggleMenu();
+      }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768 && 
+        !e.target.closest('nav') && 
+        navLinks.classList.contains('open')) {
+      toggleMenu();
+    }
+  });
+
+  function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+  }
+
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  function scaleSVG() {
+    const svg = document.getElementById('svgOverlay');
+    const mapWrapper = document.getElementById('mapWrapper');
+    if (!svg || !mapWrapper) return;
+    
+    const wrapperWidth = mapWrapper.offsetWidth;
+    const wrapperHeight = mapWrapper.offsetHeight;
+    
+    if (window.innerWidth <= 768) {
+      const scale = Math.min(wrapperWidth / 800, 1);
+      svg.style.transform = `scale(${scale})`;
+      svg.style.transformOrigin = 'top left';
+      svg.style.width = `${800}px`;
+      svg.style.height = 'auto';
+    } else {
+      svg.style.transform = 'none';
+      svg.style.width = '100%';
+      svg.style.height = '100%';
+    }
+    
+    const viewBoxAspect = 1809 / 2160;
+    const containerAspect = wrapperWidth / wrapperHeight;
+    
+    if (containerAspect > viewBoxAspect) {
+      const height = wrapperWidth / viewBoxAspect;
+      svg.setAttribute('viewBox', `0 0 1809 ${height * (2160/wrapperHeight)}`);
+    } else {
+      const width = wrapperHeight * viewBoxAspect;
+      svg.setAttribute('viewBox', `0 0 ${width * (1809/wrapperWidth)} 2160`);
+    }
+  }
+
+  scaleSVG();
+  window.addEventListener('resize', scaleSVG);
+
+  const zones = document.querySelectorAll('.map-zone');
+  const tooltip = document.getElementById('tooltip');
+
+  zones.forEach(zone => {
+    zone.addEventListener('mouseenter', function(e) {
+      const zoneName = this.getAttribute('data-zone');
+      tooltip.textContent = zoneName;
+      tooltip.classList.add('show');
+    });
+
+    zone.addEventListener('mousemove', (e) => {
+      // Get the actual cursor position accounting for page scroll
+      const cursorX = e.clientX + window.scrollX;
+      const cursorY = e.clientY + window.scrollY;
+      
+      // Position tooltip relative to cursor with offset
+      tooltip.style.left = (cursorX + 15) + 'px';
+      tooltip.style.top = (cursorY + 15) + 'px';
+    });
+
+    zone.addEventListener('mouseleave', function() {
+      tooltip.classList.remove('show');
+    });
+  });
+});
+</script>
+</body>
+</html>

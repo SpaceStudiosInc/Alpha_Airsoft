@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Waiver - Alpha Airsoft</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600;700&family=Orbitron:wght@600;900&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --primary: #1e90ff;
+      --primary-glow: rgba(30, 144, 255, 0.28);
+      --bg-dark: #000000;
+    }
+    body {
+      background: var(--bg-dark);
+      color: white;
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+      perspective: 1400px;
+    }
+
+    /* Navigation unchanged */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(30, 144, 255, 0.25);
+      padding: 1.2rem 4%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+    }
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--primary);
+      letter-spacing: 2px;
+      text-decoration: none;
+      text-shadow: 0 0 15px var(--primary-glow);
+      transition: all 0.3s;
+    }
+    .logo:hover {
+      text-shadow: 0 0 25px var(--primary-glow), 0 0 35px var(--primary-glow);
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 0.6rem 1.2rem;
+      position: relative;
+      transition: all 0.3s;
+    }
+    .nav-links a::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transform: translateX(-50%);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover::before,
+    .nav-links a.active::before {
+      width: 80%;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary);
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+    .hamburger div {
+      width: 25px;
+      height: 2px;
+      background: var(--primary);
+      transition: all 0.3s;
+      border-radius: 2px;
+    }
+    .time-display {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      color: var(--primary);
+      letter-spacing: 2px;
+    }
+
+    /* Background layers */
+    .parallax-container {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      opacity: 1;
+      width: 100%;
+      height: 200%;               /* taller so we can scroll it without gaps */
+      background-image: 
+        linear-gradient(to right, rgba(30,144,255,0.09) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30,144,255,0.09) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 2;
+      will-change: transform, opacity;
+      animation: gridDrift 28s linear infinite;   /* slow looping downward */
+    }
+    @keyframes gridDrift {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(-50%); }     /* moves exactly one grid height */
+    }
+
+    .waiver-image {
+      position: absolute;
+      inset: 0;
+      background-image: url('Photo wavier.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.65;
+      will-change: transform;
+      z-index: 3;
+      transform-style: preserve-3d;
+    }
+    .waiver-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(30,144,255,0.14) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 4;
+      opacity: 0.6;
+      transition: opacity 0.6s ease;
+    }
+
+    /* Content */
+    .content {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      padding: 100px 4% 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .waiver-container {
+      width: 100%;
+      max-width: none;
+      background: transparent;
+    }
+    .waiver-form-container {
+      height: 85vh;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: transparent;
+    }
+    .waiver-form-container iframe {
+      width: 150% !important;
+      height: 150% !important;
+      min-width: 150% !important;
+      border: none;
+      transform: scale(1.25);
+      transform-origin: center top;
+      overflow: hidden;
+      margin-top: -20px;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      html {
+        font-size: 14px;
+      }
+      
+      .hamburger { 
+        display: flex;
+        z-index: 1001;
+      }
+      
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 80%;
+        max-width: 300px;
+        background: rgba(0, 0, 0, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 2rem 1rem;
+        margin: 0;
+        z-index: 1000;
+      }
+      
+      .nav-links li {
+        width: 100%;
+        text-align: center;
+        margin: 0.5rem 0;
+      }
+      
+      .nav-links a {
+        display: block;
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .nav-links.open { 
+        transform: translateX(0);
+      }
+      
+      .hamburger.open div:nth-child(1) { 
+        transform: rotate(45deg) translate(5px, 5px); 
+      }
+      .hamburger.open div:nth-child(2) { 
+        opacity: 0; 
+      }
+      .hamburger.open div:nth-child(3) { 
+        transform: rotate(-45deg) translate(7px, -6px); 
+      }
+      
+      .time-display { 
+        display: none; 
+      }
+      
+      .content {
+        padding: 5rem 0.5rem 2rem;
+      }
+      
+      .section-header {
+        margin-bottom: 2rem;
+      }
+      
+      .section-title {
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+      }
+      
+      .section-subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .waiver-container {
+        width: 100%;
+        padding: 0 0.5rem;
+      }
+      
+      .waiver-form-container {
+        height: 70vh;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      
+      iframe {
+        width: 100% !important;
+        min-height: 500px;
+        border: none;
+      }
+      
+      .instructions {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* Tablet Styles */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .section-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+      }
+      
+      .section-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .waiver-form-container {
+        height: 75vh;
+      }
+      
+      iframe {
+        min-height: 600px;
+      }
+    }
+
+    /* Small Mobile Devices */
+    @media (max-width: 480px) {
+      html {
+        font-size: 13px;
+      }
+      
+      .logo {
+        font-size: 1.4rem;
+      }
+      
+      nav {
+        padding: 1rem 3%;
+      }
+      
+      .nav-links {
+        width: 90%;
+      }
+      
+      .content {
+        padding: 4.5rem 0.5rem 1.5rem;
+      }
+      
+      .section-title {
+        font-size: clamp(1.5rem, 8vw, 2rem);
+      }
+      
+      .section-subtitle {
+        font-size: 0.9rem;
+      }
+      
+      .waiver-container {
+        padding: 0 0.25rem;
+      }
+      
+      .waiver-form-container {
+        height: 65vh;
+        border-radius: 6px;
+      }
+      
+      iframe {
+        min-height: 450px;
+      }
+      
+      .instructions {
+        font-size: 0.85rem;
+      }
+      
+      /* Adjust background image opacity for better readability */
+      .waiver-image {
+        opacity: 0.5;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="logo">ALPHA AIRSOFT</a>
+    <button class="hamburger" aria-label="Menu">
+      <div></div><div></div><div></div>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Clayton Approved</a></li>
+      <li><a href="map.html">Map</a></li>
+      <li><a href="signup.html" class="active">Waivers</a></li>
+      <li class="time-display" id="clock">00:00:00</li>
+    </ul>
+  </nav>
+
+  <div class="parallax-container">
+    <div class="grid-overlay" id="grid"></div>
+    <div class="waiver-image" id="waiverImage"></div>
+  </div>
+
+  <div class="content">
+    <div class="waiver-container">
+      <h2 style="text-align:center; margin-bottom:1.5rem; font-family:'Orbitron'; letter-spacing:3px; color:var(--primary); text-shadow:0 0 15px var(--primary-glow);">
+        WAIVER FORM
+      </h2>
+      <div class="waiver-form-container">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScal5tmd6T9PLeEESOTuwmOubYyNs3VlFHu_A2WG9JVe9Ch7w/viewform?embedded=true&usp=embed_fb" 
+                frameborder="0" marginheight="0" marginwidth="0" scrolling="yes">Loading…</iframe>
+      </div>
+    </div>  
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const img = document.getElementById('waiverImage');
+      const grid = document.getElementById('grid');
+      const isMobile = window.innerWidth <= 768;
+
+      let mouse = { x: 0, y: 0 };
+      let target = { x: 0, y: 0, tx: 0, ty: 0, scale: 1 };
+      let current = { x: 0, y: 0, tx: 0, ty: 0, scale: 1, gridX: 0, gridY: 0 };
+      let scrollY = 0;
+
+      window.addEventListener('scroll', () => {
+        scrollY = window.scrollY;
+      });
+
+      document.addEventListener('mousemove', e => {
+        if (isMobile) return;
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
+
+        img.style.setProperty('--mx', `${e.clientX}px`);
+        img.style.setProperty('--my', `${e.clientY}px`);
+      });
+
+      function raf() {
+        if (!isMobile) {
+          target.x = mouse.x * 30;
+          target.y = mouse.y * 30;
+          target.tx = -mouse.y * 11;
+          target.ty =  mouse.x * 14;
+          const dist = Math.hypot(mouse.x, mouse.y);
+          target.scale = 1 + dist * 0.035;
+
+          target.gridX = mouse.x * 38;
+          target.gridY = mouse.y * 25;
+        }
+
+        const ease = 0.065;
+        const gridEase = 0.055;
+
+        current.x += (target.x - current.x) * ease;
+        current.y += (target.y - current.y) * ease;
+        current.tx += (target.tx - current.tx) * ease * 0.8;
+        current.ty += (target.ty - current.ty) * ease * 0.8;
+        current.scale += (target.scale - current.scale) * ease * 0.5;
+
+        current.gridX += (target.gridX - current.gridX) * gridEase;
+        current.gridY += (target.gridY - current.gridY) * gridEase;
+
+        grid.style.opacity = '1';
+
+        const scrollShift = -scrollY * 0.22;
+        img.style.transform = 
+          `translate3d(${current.x.toFixed(2)}px, ${current.y.toFixed(2)}px, 0px) ` +
+          `rotateX(${current.tx.toFixed(2)}deg) rotateY(${current.ty.toFixed(2)}deg) ` +
+          `scale(${current.scale.toFixed(4)}) ` +
+          `translateY(${scrollShift}px)`;
+
+        // Mouse offset + continuous drift is already in CSS animation
+        grid.style.transform = `translate(${current.gridX.toFixed(2)}px, ${current.gridY.toFixed(2)}px)`;
+
+        requestAnimationFrame(raf);
+      }
+      raf();
+
+      const hamburger = document.querySelector('.hamburger');
+      const navLinks = document.querySelector('.nav-links');
+      const navItems = document.querySelectorAll('.nav-links a');
+      
+      // Toggle mobile menu
+      const toggleMenu = () => {
+        navLinks.classList.toggle('open');
+        hamburger.classList.toggle('open');
+        document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+      };
+      
+      hamburger?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
+      });
+      
+      // Close menu when clicking on nav items
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            toggleMenu();
+          }
+        });
+      });
+      
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && 
+            !e.target.closest('nav') && 
+            navLinks.classList.contains('open')) {
+          toggleMenu();
+        }
+      });
+
+      const clock = document.getElementById('clock');
+      const updateClock = () => {
+        clock.textContent = new Date().toTimeString().slice(0,8);
+      };
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      anime({
+        targets: '.waiver-container',
+        opacity: [0, 1],
+        translateY: [30, 0],
+        duration: 1400,
+        easing: 'easeOutExpo'
+      });
+    });
+  </script>
+</body>
+</html>
