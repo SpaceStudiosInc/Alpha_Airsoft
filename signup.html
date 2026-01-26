@@ -281,15 +281,20 @@
       }
       
       .waiver-form-container {
-        height: 70vh;
+        height: 75vh;
         border-radius: 8px;
-        overflow: hidden;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
       }
       
-      iframe {
+      .waiver-form-container iframe {
         width: 100% !important;
-        min-height: 500px;
-        border: none;
+        height: 100% !important;
+        min-width: 100% !important;
+        min-height: 800px !important;
+        transform: none !important;
+        transform-origin: top left !important;
+        margin-top: 0 !important;
       }
       
       .instructions {
@@ -309,11 +314,15 @@
       }
       
       .waiver-form-container {
-        height: 75vh;
+        height: 80vh;
       }
       
-      iframe {
-        min-height: 600px;
+      .waiver-form-container iframe {
+        width: 140% !important;
+        height: 140% !important;
+        min-width: 140% !important;
+        transform: scale(1.15);
+        transform-origin: center top;
       }
     }
 
@@ -352,12 +361,18 @@
       }
       
       .waiver-form-container {
-        height: 65vh;
+        height: 70vh;
         border-radius: 6px;
       }
       
-      iframe {
-        min-height: 450px;
+      .waiver-form-container iframe {
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 100% !important;
+        min-height: 700px !important;
+        transform: none !important;
+        transform-origin: top left !important;
+        margin-top: 0 !important;
       }
       
       .instructions {
