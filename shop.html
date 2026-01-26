@@ -410,9 +410,11 @@ min-height: auto;
 
 .category-header {
 margin-bottom: 2rem;
-width: 65%;
+width: 100%;
 margin-left: auto;
 margin-right: auto;
+padding: 0 1rem;
+max-width: 1200px;
 }
 
 .category-title {
@@ -424,11 +426,12 @@ font-size: 1rem;
 }
 
 .products-grid {
-width: 65%;
+width: 100%;
 margin: 0 auto;
-grid-template-columns: 1fr;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 gap: 1.5rem;
 padding: 0 1rem;
+max-width: 1200px;
 }
 
 .product-card {
@@ -516,6 +519,7 @@ padding: 4rem 0.5rem;
 .products-grid {
 padding: 0 0.5rem;
 gap: 1rem;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 .product-image {
