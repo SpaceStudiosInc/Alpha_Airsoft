@@ -566,16 +566,25 @@ font-weight: 600;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x pan-y;
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 300px;
   }
   
   .map-image {
-    min-width: 800px;
+    width: 100%;
     height: auto;
+    min-height: 300px;
+    object-fit: contain;
   }
   
   .svg-overlay {
-    min-width: 800px;
-    height: auto;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   
   .zone-tooltip {
@@ -666,14 +675,25 @@ font-weight: 600;
   
   .map-wrapper {
     border-radius: 2px;
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 250px;
   }
   
   .map-image {
-    min-width: 600px;
+    width: 100%;
+    height: auto;
+    min-height: 250px;
+    object-fit: contain;
   }
   
   .svg-overlay {
-    min-width: 600px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   
   .map-legend {
@@ -763,13 +783,13 @@ font-weight: 600;
 <h3>Alpha Airsoft</h3>
 <p><span class="info-highlight">📍</span> 35°19'43.9"N 94°20'35.0"W, Fort Smith, AR 72901</p>
 <div style="margin-top: 1.5rem; opacity: 0.8; font-size: 0.9rem;">
-<p>📧 info@alphaairsoft.com</p>
+<p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c4adaaa2ab84a5a8b4aca5a5adb6b7aba2b0eaa7aba9">[email&#160;protected]</a></p>
 </div>
 </div>
 </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 document.addEventListener('DOMContentLoaded', () => {
   const fieldImg = document.getElementById('fieldImage');
   const grid = document.getElementById('grid');
@@ -884,26 +904,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const wrapperHeight = mapWrapper.offsetHeight;
     
     if (window.innerWidth <= 768) {
-      const scale = Math.min(wrapperWidth / 800, 1);
-      svg.style.transform = `scale(${scale})`;
-      svg.style.transformOrigin = 'top left';
-      svg.style.width = `${800}px`;
-      svg.style.height = 'auto';
-    } else {
+      // On mobile, make SVG fully responsive
       svg.style.transform = 'none';
       svg.style.width = '100%';
       svg.style.height = '100%';
-    }
-    
-    const viewBoxAspect = 1809 / 2160;
-    const containerAspect = wrapperWidth / wrapperHeight;
-    
-    if (containerAspect > viewBoxAspect) {
-      const height = wrapperWidth / viewBoxAspect;
-      svg.setAttribute('viewBox', `0 0 1809 ${height * (2160/wrapperHeight)}`);
+      svg.setAttribute('viewBox', '0 0 1809 2160');
+      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     } else {
-      const width = wrapperHeight * viewBoxAspect;
-      svg.setAttribute('viewBox', `0 0 ${width * (1809/wrapperWidth)} 2160`);
+      // Desktop behavior
+      svg.style.transform = 'none';
+      svg.style.width = '100%';
+      svg.style.height = '100%';
+      
+      const viewBoxAspect = 1809 / 2160;
+      const containerAspect = wrapperWidth / wrapperHeight;
+      
+      if (containerAspect > viewBoxAspect) {
+        const height = wrapperWidth / viewBoxAspect;
+        svg.setAttribute('viewBox', `0 0 1809 ${height * (2160/wrapperHeight)}`);
+      } else {
+        const width = wrapperHeight * viewBoxAspect;
+        svg.setAttribute('viewBox', `0 0 ${width * (1809/wrapperWidth)} 2160`);
+      }
     }
   }
 
@@ -926,15 +948,4 @@ document.addEventListener('DOMContentLoaded', () => {
       const cursorY = e.clientY + window.scrollY;
       
       // Position tooltip relative to cursor with offset
-      tooltip.style.left = (cursorX + 15) + 'px';
-      tooltip.style.top = (cursorY + 15) + 'px';
-    });
-
-    zone.addEventListener('mouseleave', function() {
-      tooltip.classList.remove('show');
-    });
-  });
-});
-</script>
-</body>
-</html>
+      tooltip
