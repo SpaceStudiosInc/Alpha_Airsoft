@@ -16,11 +16,16 @@ box-sizing: border-box;
 --primary-glow: rgba(30, 144, 255, 0.3);
 --bg-dark: #0a0a0a;
 }
+html, body {
+height: 100%;
+width: 100%;
+overflow: hidden;
+position: fixed;
+}
 body {
 background: var(--bg-dark);
 color: white;
 font-family: 'Rajdhani', sans-serif;
-overflow-x: hidden;
 }
 .video-background {
 position: fixed;
@@ -42,28 +47,26 @@ background: rgba(0, 0, 0, 0.5);
 z-index: 1;
 pointer-events: none;
 }
-.video-background video {
+.video-background iframe {
 position: absolute;
 top: 50%;
 left: 50%;
-min-width: 100%;
-min-height: 100%;
-width: auto;
-height: auto;
+width: 100%;
+height: 100%;
 transform: translate(-50%, -50%);
-object-fit: cover;
+pointer-events: none;
 }
+@media (min-aspect-ratio: 16/9) {
+.video-background iframe {
+width: 177.78vh;
+height: 100vh;
+}
+}
+@media (max-aspect-ratio: 16/9) {
 .video-background iframe {
 width: 100vw;
 height: 56.25vw;
-min-height: 100vh;
-min-width: 177.77vh;
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-object-fit: cover;
-pointer-events: none;
+}
 }
 nav {
 position: fixed;
@@ -156,8 +159,7 @@ font-variant-numeric: tabular-nums;
 .content {
 position: relative;
 z-index: 10;
-min-height: 100vh;
-padding-top: 80px;
+height: 100vh;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -318,18 +320,6 @@ margin-bottom: 2rem;
 font-size: 1rem;
 padding: 1rem 2rem;
 min-height: 48px;
-}
-.video-background iframe,
-.video-background video {
-width: 100vw;
-height: 100vh;
-min-width: 100vw;
-min-height: 100vh;
-object-fit: cover;
-position: fixed;
-top: 0;
-left: 0;
-transform: none;
 }
 }
 @media screen and (min-width: 769px) and (max-width: 1024px) {
