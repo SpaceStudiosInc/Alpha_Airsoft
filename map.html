@@ -380,7 +380,7 @@ width: 100%;
 aspect-ratio: 1809 / 2160;
 background: #111;
 border-radius: 4px;
-overflow: hidden;
+overflow: visible;
 }
 .map-image {
 width: 100%;
@@ -464,6 +464,7 @@ font-weight: 600;
 /* Mobile toast notification */
 .mobile-zone-label {
 position: absolute;
+display: none;
 background: rgba(30, 144, 255, 0.95);
 color: white;
 padding: 0.8rem 1.5rem;
@@ -475,15 +476,13 @@ letter-spacing: 1px;
 font-size: 1rem;
 text-transform: uppercase;
 z-index: 10000;
-opacity: 0;
 pointer-events: none;
 white-space: nowrap;
 transform: translate(-50%, -50%);
-transition: opacity 0.3s ease;
 }
 
 .mobile-zone-label.show {
-opacity: 1;
+display: block;
 animation: fadeInScale 0.3s ease;
 }
 
@@ -749,7 +748,6 @@ transform: translate(-50%, -50%) scale(1);
 </nav>
 
 <div class="zone-tooltip" id="tooltip"></div>
-<div class="mobile-zone-label" id="mobileLabel"></div>
 
 <div class="content">
 <div class="section-header">
@@ -790,6 +788,7 @@ transform: translate(-50%, -50%) scale(1);
 <!-- Zone 10: Blue Spawn -->
 <polygon class="map-zone" data-zone="Blue Spawn" points="1799,1261 1476,1260 1472,1512 1799,1502" />
 </svg>
+<div class="mobile-zone-label" id="mobileLabel"></div>
 </div>
 
 <div class="map-legend">
@@ -927,28 +926,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let labelTimeout = null;
 
   zones.forEach(zone => {
-    // Desktop hover behavior
-    if (!isMobile) {
-      zone.addEventListener('mouseenter', function(e) {
-        const zoneName = this.getAttribute('data-zone');
-        tooltip.textContent = zoneName;
-        tooltip.classList.add('show');
-      });
-
-      zone.addEventListener('mousemove', (e) => {
-        const cursorX = e.clientX;
-        const cursorY = e.clientY;
-        tooltip.style.left = (cursorX + 15) + 'px';
-        tooltip.style.top = (cursorY + 15) + 'px';
-      });
-
-      zone.addEventListener('mouseleave', function() {
-        tooltip.classList.remove('show');
-      });
-    } 
-    // Mobile tap behavior
-    else {
-      zone.addEventListener('click', function(e) {
+    // Mobile tap behavior - handle both click and touch
+    if (isMobile) {
+      const handleZoneTap = function(e) {
         e.preventDefault();
         e.stopPropagation();
         
@@ -971,7 +951,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const svgRect = svg.getBoundingClientRect();
         const viewBox = svg.viewBox.baseVal;
         
-        // Convert SVG coordinates to screen coordinates
+        // Convert SVG coordinates to screen coordinates (relative to SVG)
         const scaleX = svgRect.width / viewBox.width;
         const scaleY = svgRect.height / viewBox.height;
         
@@ -989,14 +969,36 @@ document.addEventListener('DOMContentLoaded', () => {
           clearTimeout(labelTimeout);
         }
         
-        // Hide label after 2 seconds
+        // Hide label after 2.5 seconds
         labelTimeout = setTimeout(() => {
           mobileLabel.classList.remove('show');
           if (activeMobileZone) {
             activeMobileZone.classList.remove('active');
             activeMobileZone = null;
           }
-        }, 2000);
+        }, 2500);
+      };
+      
+      zone.addEventListener('click', handleZoneTap);
+      zone.addEventListener('touchend', handleZoneTap);
+    } 
+    // Desktop hover behavior
+    else {
+      zone.addEventListener('mouseenter', function(e) {
+        const zoneName = this.getAttribute('data-zone');
+        tooltip.textContent = zoneName;
+        tooltip.classList.add('show');
+      });
+
+      zone.addEventListener('mousemove', (e) => {
+        const cursorX = e.clientX;
+        const cursorY = e.clientY;
+        tooltip.style.left = (cursorX + 15) + 'px';
+        tooltip.style.top = (cursorY + 15) + 'px';
+      });
+
+      zone.addEventListener('mouseleave', function() {
+        tooltip.classList.remove('show');
       });
     }
   });
