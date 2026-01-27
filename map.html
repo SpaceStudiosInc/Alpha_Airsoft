@@ -399,6 +399,10 @@ top: 0;
 left: 0;
 width: 100%;
 height: 100%;
+pointer-events: none;
+}
+.svg-overlay * {
+pointer-events: auto;
 }
 .map-zone {
 fill: rgba(30, 144, 255, 0.02);
@@ -555,31 +559,31 @@ font-weight: 600;
   }
   
   .map-container {
-    width: 90%;
+    width: 95%;
     padding: 1rem;
     margin: 0 auto;
-    border-radius: 0;
   }
   
   .map-wrapper {
     border-radius: 4px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x pan-y;
+    overflow: visible;
+    aspect-ratio: 1809 / 2160;
   }
   
   .map-image {
-    min-width: 800px;
-    height: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
   
   .svg-overlay {
-    min-width: 800px;
-    height: auto;
+    width: 100%;
+    height: 100%;
   }
   
   .zone-tooltip {
-    display: none;
+    font-size: 12px;
+    padding: 8px 12px;
   }
   
   .map-legend {
@@ -591,7 +595,7 @@ font-weight: 600;
     font-size: 0.85rem;
   }
   
-  .map-legend-item {
+  .legend-item {
     padding: 0.5rem;
     min-height: 32px;
   }
@@ -605,7 +609,12 @@ font-weight: 600;
   }
   
   .field-image {
-    opacity: 0.5;
+    opacity: 0.15;
+  }
+  
+  /* Mobile-specific zone interactions */
+  .map-zone {
+    stroke-width: 3;
   }
 }
 
@@ -616,6 +625,7 @@ font-weight: 600;
   }
   
   .map-container {
+    width: 85%;
     padding: 1.5rem;
   }
   
@@ -659,8 +669,8 @@ font-weight: 600;
   }
   
   .map-container {
-    width: 95%;
-    padding: 0.5rem;
+    width: 98%;
+    padding: 0.75rem;
     margin: 0 auto;
   }
   
@@ -668,25 +678,18 @@ font-weight: 600;
     border-radius: 2px;
   }
   
-  .map-image {
-    min-width: 600px;
-  }
-  
-  .svg-overlay {
-    min-width: 600px;
-  }
-  
   .map-legend {
     font-size: 0.75rem;
+    padding: 10px;
   }
   
-  .map-legend-item {
+  .legend-item {
     padding: 0.4rem;
     min-height: 28px;
   }
   
   .info-section {
-    margin: 0.5rem -0.5rem -0.5rem;
+    margin: 0.5rem -0.75rem -0.75rem;
     padding: 0.8rem;
     font-size: 0.9rem;
   }
@@ -726,7 +729,7 @@ font-weight: 600;
 <div class="map-container">
 <div class="map-wrapper" id="mapWrapper">
 <img src="Map.png" alt="Alpha Airsoft Map" class="map-image" id="mapImage">
-<svg class="svg-overlay" id="svgOverlay" preserveAspectRatio="none">
+<svg class="svg-overlay" id="svgOverlay" viewBox="0 0 1809 2160" preserveAspectRatio="xMidYMid meet">
 <!-- Zone 1: Red Spawn -->
 <polygon class="map-zone" data-zone="Red Spawn" points="450,355 559,76 909,70 909,355" />
 
@@ -875,64 +878,63 @@ document.addEventListener('DOMContentLoaded', () => {
   updateClock();
   setInterval(updateClock, 1000);
 
-  function scaleSVG() {
-    const svg = document.getElementById('svgOverlay');
-    const mapWrapper = document.getElementById('mapWrapper');
-    if (!svg || !mapWrapper) return;
-    
-    const wrapperWidth = mapWrapper.offsetWidth;
-    const wrapperHeight = mapWrapper.offsetHeight;
-    
-    if (window.innerWidth <= 768) {
-      const scale = Math.min(wrapperWidth / 800, 1);
-      svg.style.transform = `scale(${scale})`;
-      svg.style.transformOrigin = 'top left';
-      svg.style.width = `${800}px`;
-      svg.style.height = 'auto';
-    } else {
-      svg.style.transform = 'none';
-      svg.style.width = '100%';
-      svg.style.height = '100%';
-    }
-    
-    const viewBoxAspect = 1809 / 2160;
-    const containerAspect = wrapperWidth / wrapperHeight;
-    
-    if (containerAspect > viewBoxAspect) {
-      const height = wrapperWidth / viewBoxAspect;
-      svg.setAttribute('viewBox', `0 0 1809 ${height * (2160/wrapperHeight)}`);
-    } else {
-      const width = wrapperHeight * viewBoxAspect;
-      svg.setAttribute('viewBox', `0 0 ${width * (1809/wrapperWidth)} 2160`);
-    }
-  }
-
-  scaleSVG();
-  window.addEventListener('resize', scaleSVG);
-
   const zones = document.querySelectorAll('.map-zone');
   const tooltip = document.getElementById('tooltip');
 
   zones.forEach(zone => {
+    // Mouse events for desktop
     zone.addEventListener('mouseenter', function(e) {
-      const zoneName = this.getAttribute('data-zone');
-      tooltip.textContent = zoneName;
-      tooltip.classList.add('show');
+      if (window.innerWidth > 768) {
+        const zoneName = this.getAttribute('data-zone');
+        tooltip.textContent = zoneName;
+        tooltip.classList.add('show');
+      }
     });
 
     zone.addEventListener('mousemove', (e) => {
-      // Get the actual cursor position accounting for page scroll
-      const cursorX = e.clientX + window.scrollX;
-      const cursorY = e.clientY + window.scrollY;
-      
-      // Position tooltip relative to cursor with offset
-      tooltip.style.left = (cursorX + 15) + 'px';
-      tooltip.style.top = (cursorY + 15) + 'px';
+      if (window.innerWidth > 768) {
+        const cursorX = e.clientX + window.scrollX;
+        const cursorY = e.clientY + window.scrollY;
+        
+        tooltip.style.left = (cursorX + 15) + 'px';
+        tooltip.style.top = (cursorY + 15) + 'px';
+      }
     });
 
     zone.addEventListener('mouseleave', function() {
-      tooltip.classList.remove('show');
+      if (window.innerWidth > 768) {
+        tooltip.classList.remove('show');
+      }
     });
+
+    // Touch events for mobile
+    zone.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      const zoneName = this.getAttribute('data-zone');
+      tooltip.textContent = zoneName;
+      
+      const touch = e.touches[0];
+      const rect = e.target.getBoundingClientRect();
+      const tooltipX = touch.clientX + window.scrollX;
+      const tooltipY = touch.clientY + window.scrollY;
+      
+      tooltip.style.left = (tooltipX + 15) + 'px';
+      tooltip.style.top = (tooltipY - 40) + 'px';
+      tooltip.classList.add('show');
+      
+      // Auto-hide after 2 seconds on mobile
+      setTimeout(() => {
+        tooltip.classList.remove('show');
+      }, 2000);
+    });
+  });
+
+  // Hide tooltip when scrolling on mobile
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    if (window.innerWidth <= 768) {
+      tooltip.classList.remove('show');
+    }
   });
 });
 </script>
