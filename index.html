@@ -368,9 +368,10 @@ padding: 0.8rem 1.5rem;
 <body>
 <div class="video-background">
 <iframe
-src="https://www.youtube.com/embed/ChykAXLLwLo?autoplay=1&mute=1&controls=0&loop=1&playlist=ChykAXLLwLo&modestbranding=1&showinfo=0&rel=0&disablekb=1&fs=0&playsinline=1&iv_load_policy=3&cc_load_policy=0"
+id="bgVideo"
+src="https://www.youtube.com/embed/ChykAXLLwLo?autoplay=1&mute=1&controls=0&loop=1&playlist=ChykAXLLwLo&modestbranding=1&showinfo=0&rel=0&disablekb=1&fs=0&playsinline=1&iv_load_policy=3&cc_load_policy=0&enablejsapi=1"
 frameborder="0"
-allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+allow="autoplay; fullscreen; encrypted-media; picture-in-picture; accelerometer; gyroscope"
 allowfullscreen
 ></iframe>
 </div>
@@ -399,6 +400,43 @@ allowfullscreen
 </div>
 </div>
 <script>
+// Immediate video initialization
+(function() {
+  const initVideo = () => {
+    const iframe = document.getElementById('bgVideo');
+    if (iframe && !iframe.src) {
+      iframe.src = 'https://www.youtube.com/embed/ChykAXLLwLo?autoplay=1&mute=1&controls=0&loop=1&playlist=ChykAXLLwLo&modestbranding=1&showinfo=0&rel=0&disablekb=1&fs=0&playsinline=1&iv_load_policy=3&cc_load_policy=0&enablejsapi=1';
+    }
+  };
+  
+  // Try immediately
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(initVideo, 1);
+  } else {
+    window.addEventListener('DOMContentLoaded', initVideo);
+  }
+  
+  // Fallback: trigger on any user interaction
+  const retryOnInteraction = () => {
+    const iframe = document.getElementById('bgVideo');
+    if (iframe) {
+      const currentSrc = iframe.src;
+      iframe.src = currentSrc + '&retry=' + Date.now();
+    }
+  };
+  
+  let interactionTriggered = false;
+  const handleInteraction = () => {
+    if (!interactionTriggered) {
+      interactionTriggered = true;
+      setTimeout(retryOnInteraction, 100);
+    }
+  };
+  
+  document.addEventListener('click', handleInteraction, { once: true });
+  document.addEventListener('touchstart', handleInteraction, { once: true });
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');
