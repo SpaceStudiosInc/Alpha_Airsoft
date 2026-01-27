@@ -29,7 +29,6 @@ left: 0;
 width: 100%;
 height: 100%;
 z-index: 0;
-pointer-events: none;
 overflow: hidden;
 }
 .video-background::after {
@@ -41,6 +40,18 @@ width: 100%;
 height: 100%;
 background: rgba(0, 0, 0, 0.5);
 z-index: 1;
+pointer-events: none;
+}
+.video-background video {
+position: absolute;
+top: 50%;
+left: 50%;
+min-width: 100%;
+min-height: 100%;
+width: auto;
+height: auto;
+transform: translate(-50%, -50%);
+object-fit: cover;
 }
 .video-background iframe {
 width: 100vw;
@@ -52,6 +63,7 @@ top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 object-fit: cover;
+pointer-events: none;
 }
 nav {
 position: fixed;
@@ -307,7 +319,8 @@ font-size: 1rem;
 padding: 1rem 2rem;
 min-height: 48px;
 }
-.video-background iframe {
+.video-background iframe,
+.video-background video {
 width: 100vw;
 height: 100vh;
 min-width: 100vw;
@@ -362,7 +375,14 @@ padding: 0.8rem 1.5rem;
 </head>
 <body>
 <div class="video-background">
-<div id="bgVideo"></div>
+<iframe
+id="bgVideo"
+src="https://www.youtube-nocookie.com/embed/ChykAXLLwLo?autoplay=1&mute=1&controls=0&showinfo=0&loop=1&playlist=ChykAXLLwLo&playsinline=1&modestbranding=1&rel=0&enablejsapi=0&disablekb=1&fs=0&iv_load_policy=3"
+title="Background video"
+frameborder="0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen
+></iframe>
 </div>
 <nav>
 <a href="index.html" class="logo">ALPHA AIRSOFT</a>
@@ -388,61 +408,7 @@ padding: 0.8rem 1.5rem;
 </a>
 </div>
 </div>
-<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-let player;
-function onYouTubeIframeAPIReady() {
-player = new YT.Player('bgVideo', {
-videoId: 'ChykAXLLwLo',
-playerVars: {
-autoplay: 1,
-mute: 1,
-controls: 0,
-loop: 1,
-playlist: 'ChykAXLLwLo',
-modestbranding: 1,
-showinfo: 0,
-rel: 0,
-disablekb: 1,
-fs: 0,
-playsinline: 1,
-iv_load_policy: 3,
-cc_load_policy: 0,
-enablejsapi: 1
-},
-events: {
-'onReady': onPlayerReady,
-'onStateChange': onPlayerStateChange
-}
-});
-}
-function onPlayerReady(event) {
-event.target.mute();
-event.target.playVideo();
-}
-function onPlayerStateChange(event) {
-if (event.data === YT.PlayerState.ENDED) {
-event.target.playVideo();
-}
-}
-let hasInteracted = false;
-function tryPlayOnInteraction() {
-if (!hasInteracted && player && player.playVideo) {
-hasInteracted = true;
-player.mute();
-player.playVideo();
-}
-}
-document.addEventListener('click', tryPlayOnInteraction, { once: true });
-document.addEventListener('touchstart', tryPlayOnInteraction, { once: true });
-window.addEventListener('load', () => {
-setTimeout(() => {
-if (player && player.playVideo) {
-player.mute();
-player.playVideo();
-}
-}, 500);
-});
 document.addEventListener('DOMContentLoaded', () => {
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
@@ -502,6 +468,7 @@ iteration += 1 / 3;
 runScramble(heroTitle);
 }
 });
+
 document.addEventListener('mousemove', (e) => {
 const heroTitle = document.getElementById('scrambleText');
 if (!heroTitle) return;
@@ -514,6 +481,7 @@ const rotateX = (mouseY - centerY) * 0.01;
 const rotateY = (mouseX - centerX) * 0.01;
 heroTitle.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 });
+
 document.addEventListener('mouseleave', () => {
 const heroTitle = document.getElementById('scrambleText');
 if (heroTitle) {
