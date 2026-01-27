@@ -387,10 +387,11 @@ background: #111;
 border-radius: 4px;
 overflow: hidden;
 }
+
 .map-image {
 width: 100%;
 height: 100%;
-object-fit: cover;
+object-fit: contain;
 display: block;
 }
 .svg-overlay {
@@ -399,6 +400,11 @@ top: 0;
 left: 0;
 width: 100%;
 height: 100%;
+pointer-events: none;
+}
+
+.map-zone {
+pointer-events: auto;
 }
 .map-zone {
 fill: rgba(30, 144, 255, 0.02);
@@ -898,17 +904,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function scaleSVG() {
     const svg = document.getElementById('svgOverlay');
     const mapWrapper = document.getElementById('mapWrapper');
-    const mapImage = document.getElementById('mapImage');
-    if (!svg || !mapWrapper || !mapImage) return;
+    if (!svg || !mapWrapper) return;
     
-    // Wait for image to load
-    if (!mapImage.complete) {
-      mapImage.onload = scaleSVG;
-      return;
-    }
-    
-    const imageWidth = mapImage.naturalWidth;
-    const imageHeight = mapImage.naturalHeight;
+    // The map image is 1809 × 2160 pixels
+    // All polygon coordinates are based on these dimensions
+    const imageWidth = 1809;
+    const imageHeight = 2160;
     
     // Set viewBox to match the original image dimensions
     svg.setAttribute('viewBox', `0 0 ${imageWidth} ${imageHeight}`);
@@ -917,18 +918,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // Make SVG fully responsive to container
     svg.style.width = '100%';
     svg.style.height = '100%';
-    svg.style.transform = 'none';
+    svg.style.position = 'absolute';
+    svg.style.top = '0';
+    svg.style.left = '0';
   }
 
-  // Initial scale
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', scaleSVG);
-  } else {
-    scaleSVG();
+  // Run immediately
+  scaleSVG();
+  
+  // Run on resize
+  window.addEventListener('resize', scaleSVG);
+  
+  // Run when image loads
+  const mapImage = document.getElementById('mapImage');
+  if (mapImage) {
+    if (mapImage.complete) {
+      scaleSVG();
+    } else {
+      mapImage.addEventListener('load', scaleSVG);
+    }
   }
   
-  window.addEventListener('resize', scaleSVG);
-  window.addEventListener('load', scaleSVG);
+  // Run when DOM is fully ready
+  setTimeout(scaleSVG, 100);
 
   const zones = document.querySelectorAll('.map-zone');
   const tooltip = document.getElementById('tooltip');
