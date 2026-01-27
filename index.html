@@ -35,6 +35,7 @@ width: 100%;
 height: 100%;
 z-index: 0;
 overflow: hidden;
+background: #000;
 }
 .video-background::after {
 content: '';
@@ -52,11 +53,23 @@ position: absolute;
 top: 50%;
 left: 50%;
 width: 100vw;
-height: 56.25vw; /* 16:9 aspect ratio */
+height: 56.25vw;
 min-height: 100vh;
-min-width: 177.78vh; /* 16:9 aspect ratio */
+min-width: 177.78vh;
 transform: translate(-50%, -50%);
 pointer-events: none;
+}
+
+/* Fallback background image */
+.video-background::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #0f0f1e 100%);
+z-index: -1;
 }
 
 nav {
@@ -365,10 +378,10 @@ box-shadow: 0 5px 15px rgba(30, 144, 255, 0.3);
 <div class="video-background">
 <iframe
 id="bgVideo"
-src="https://www.youtube-nocookie.com/embed/ChykAXLLwLo?autoplay=1&mute=1&controls=0&showinfo=0&loop=1&playlist=ChykAXLLwLo&playsinline=1&modestbranding=1&rel=0&enablejsapi=1&disablekb=1&fs=0&iv_load_policy=3&start=0"
+src="https://www.youtube.com/embed/ChykAXLLwLo?autoplay=1&mute=1&controls=0&showinfo=0&loop=1&playlist=ChykAXLLwLo&playsinline=1&modestbranding=1&rel=0&enablejsapi=0&disablekb=1&fs=0&iv_load_policy=3"
 title="Background video"
 frameborder="0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 allowfullscreen
 ></iframe>
 </div>
@@ -398,35 +411,22 @@ allowfullscreen
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // YouTube API autoplay fix
-  const iframe = document.getElementById('bgVideo');
-  
-  // Add interaction listener to ensure autoplay on iOS/mobile
-  const ensureAutoplay = () => {
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-    }
-  };
-  
-  // Try to play on any user interaction
-  document.addEventListener('click', ensureAutoplay, { once: true });
-  document.addEventListener('touchstart', ensureAutoplay, { once: true });
-  
-  // Also try after a short delay
-  setTimeout(ensureAutoplay, 1000);
-
+  // Mobile menu functionality
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');
   const navItems = document.querySelectorAll('.nav-links a');
+  
   const toggleMenu = () => {
     navLinks.classList.toggle('open');
     hamburger.classList.toggle('open');
     document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
   };
+  
   hamburger?.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleMenu();
   });
+  
   navItems.forEach(item => {
     item.addEventListener('click', () => {
       if (window.innerWidth <= 768) {
@@ -434,11 +434,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+  
   document.addEventListener('click', (e) => {
     if (window.innerWidth <= 768 && !e.target.closest('nav') && navLinks.classList.contains('open')) {
       toggleMenu();
     }
   });
+
+  // Clock functionality
   function updateClock() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -448,14 +451,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateClock();
   setInterval(updateClock, 1000);
+
+  // Text scramble effect
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let interval = null;
   const heroTitle = document.querySelector(".hero-title");
+  
   if (heroTitle) {
     const runScramble = (element) => {
       let iteration = 0;
       const originalText = element.textContent;
       const textLength = originalText.length;
+      
       clearInterval(interval);
       interval = setInterval(() => {
         element.innerText = originalText.split("").map((letter, index) => {
@@ -464,6 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           return letters[Math.floor(Math.random() * 26)];
         }).join("");
+        
         if(iteration >= textLength) {
           clearInterval(interval);
         }
@@ -472,24 +480,30 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     runScramble(heroTitle);
   }
-});
-document.addEventListener('mousemove', (e) => {
-  const heroTitle = document.getElementById('scrambleText');
-  if (!heroTitle) return;
-  const rect = heroTitle.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
-  const mouseX = e.clientX;
-  const mouseY = e.clientY;
-  const rotateX = (mouseY - centerY) * 0.01;
-  const rotateY = (mouseX - centerX) * 0.01;
-  heroTitle.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-});
-document.addEventListener('mouseleave', () => {
-  const heroTitle = document.getElementById('scrambleText');
-  if (heroTitle) {
-    heroTitle.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-  }
+
+  // 3D tilt effect for hero title
+  document.addEventListener('mousemove', (e) => {
+    const heroTitle = document.getElementById('scrambleText');
+    if (!heroTitle) return;
+    
+    const rect = heroTitle.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    
+    const rotateX = (mouseY - centerY) * 0.01;
+    const rotateY = (mouseX - centerX) * 0.01;
+    
+    heroTitle.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+  
+  document.addEventListener('mouseleave', () => {
+    const heroTitle = document.getElementById('scrambleText');
+    if (heroTitle) {
+      heroTitle.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+    }
+  });
 });
 </script>
 </body>
