@@ -463,27 +463,39 @@ font-weight: 600;
 
 /* Mobile toast notification */
 .mobile-zone-label {
-position: fixed;
-bottom: 20px;
-left: 50%;
-transform: translateX(-50%);
-background: rgba(10, 10, 10, 0.95);
+position: absolute;
+background: rgba(30, 144, 255, 0.95);
 color: white;
-padding: 12px 20px;
+padding: 0.8rem 1.5rem;
 border-radius: 8px;
-border: 2px solid var(--primary);
-box-shadow: 0 0 20px rgba(30, 144, 255, 0.6);
+border: 2px solid rgba(255, 255, 255, 0.3);
+box-shadow: 0 4px 20px rgba(30, 144, 255, 0.7);
 font-weight: 600;
 letter-spacing: 1px;
-font-size: 16px;
+font-size: 1rem;
+text-transform: uppercase;
 z-index: 10000;
 opacity: 0;
 pointer-events: none;
+white-space: nowrap;
+transform: translate(-50%, -50%);
 transition: opacity 0.3s ease;
 }
 
 .mobile-zone-label.show {
 opacity: 1;
+animation: fadeInScale 0.3s ease;
+}
+
+@keyframes fadeInScale {
+from {
+opacity: 0;
+transform: translate(-50%, -50%) scale(0.9);
+}
+to {
+opacity: 1;
+transform: translate(-50%, -50%) scale(1);
+}
 }
 
 /* Mobile Styles */
@@ -791,13 +803,13 @@ opacity: 1;
 <h3>Alpha Airsoft</h3>
 <p><span class="info-highlight">📍</span> 35°19'43.9"N 94°20'35.0"W, Fort Smith, AR 72901</p>
 <div style="margin-top: 1.5rem; opacity: 0.8; font-size: 0.9rem;">
-<p>📧 info@alphaairsoft.com</p>
+<p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4f262129200f2e233f272e2e263d3c20293b612c2022">[email&#160;protected]</a></p>
 </div>
 </div>
 </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 document.addEventListener('DOMContentLoaded', () => {
   const fieldImg = document.getElementById('fieldImage');
   const grid = document.getElementById('grid');
@@ -949,8 +961,27 @@ document.addEventListener('DOMContentLoaded', () => {
         this.classList.add('active');
         activeMobileZone = this;
         
-        // Show mobile label
+        // Calculate the center point of the polygon
+        const bbox = this.getBBox();
+        const centerX = bbox.x + bbox.width / 2;
+        const centerY = bbox.y + bbox.height / 2;
+        
+        // Get the SVG and map wrapper dimensions
+        const svg = document.getElementById('svgOverlay');
+        const svgRect = svg.getBoundingClientRect();
+        const viewBox = svg.viewBox.baseVal;
+        
+        // Convert SVG coordinates to screen coordinates
+        const scaleX = svgRect.width / viewBox.width;
+        const scaleY = svgRect.height / viewBox.height;
+        
+        const screenX = centerX * scaleX;
+        const screenY = centerY * scaleY;
+        
+        // Position label at the center of the zone (relative to map wrapper)
         mobileLabel.textContent = zoneName;
+        mobileLabel.style.left = screenX + 'px';
+        mobileLabel.style.top = screenY + 'px';
         mobileLabel.classList.add('show');
         
         // Clear existing timeout
@@ -974,16 +1005,4 @@ document.addEventListener('DOMContentLoaded', () => {
   if (isMobile) {
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.map-zone')) {
-        zones.forEach(z => z.classList.remove('active'));
-        mobileLabel.classList.remove('show');
-        activeMobileZone = null;
-        if (labelTimeout) {
-          clearTimeout(labelTimeout);
-        }
-      }
-    });
-  }
-});
-</script>
-</body>
-</html>
+        zones.forEach(z => z.cl
