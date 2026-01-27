@@ -85,6 +85,26 @@ width: 80%;
 .nav-links a.active {
 color: var(--primary);
 }
+.scroll-indicator {
+  text-align: center;
+  padding: 2rem 0;
+  position: relative;
+  z-index: 5;
+}
+
+.scroll-indicator .category-number {
+  font-size: 1rem;
+  color: var(--primary);
+  letter-spacing: 3px;
+  opacity: 0.7;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+  
 .hamburger {
 display: none;
 flex-direction: column;
@@ -583,9 +603,9 @@ font-size: 0.8rem;
 <p class="section-subtitle">*Clayton's Opinion May Vary*</p>
 </div>
 </section>
-<div>
-<div class="category-number">↓ Scroll Down ↓</div>
-<div>
+<div class="scroll-indicator">
+  <div class="category-number">↓ Scroll Down ↓</div>
+</div>
 <!-- Eye Protection -->
 <section class="category-section" id="protective">
 <div class="category-header">
