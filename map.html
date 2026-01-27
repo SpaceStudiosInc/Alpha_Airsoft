@@ -18,9 +18,8 @@
   cursor: pointer;
 }
 
-.map-zone[data-zone="Red Spawn"]:hover,
-.map-zone[data-zone="Red Spawn"].active {
-  fill: rgba(255, 0, 0, 0.7);
+.map-zone[data-zone="Red Spawn"]:hover {
+  fill: rgba(255, 0, 0, 0.9);
   stroke: rgba(255, 0, 0, 1);
 }
 
@@ -34,9 +33,8 @@
   cursor: pointer;
 }
 
-.map-zone[data-zone="Blue Spawn"]:hover,
-.map-zone[data-zone="Blue Spawn"].active {
-  fill: rgba(0, 0, 255, 0.7);
+.map-zone[data-zone="Blue Spawn"]:hover {
+  fill: rgba(0, 0, 255, 0.9);
   stroke: rgba(0, 0, 255, 1);
 }
 
@@ -51,9 +49,8 @@
   cursor: pointer;
 }
 
-.map-zone[data-zone="Center Woods"]:hover,
-.map-zone[data-zone="Center Woods"].active {
-  fill: rgba(100, 196, 255, 0.7);
+.map-zone[data-zone="Center Woods"]:hover {
+  fill: rgba(100, 196, 255, 0.9);
   stroke: rgba(100, 196, 255, 1);
 }
 
@@ -67,9 +64,8 @@
   cursor: pointer;
 }
 
-.map-zone[data-zone="North Woods"]:hover,
-.map-zone[data-zone="North Woods"].active {
-  fill: rgba(19, 137, 216, 0.7);
+.map-zone[data-zone="North Woods"]:hover {
+  fill: rgba(19, 137, 216, 0.9);
   stroke: rgba(19, 137, 216, 1);
 }
 
@@ -83,9 +79,8 @@
   cursor: pointer;
 }
 
-.map-zone[data-zone="South Woods"]:hover,
-.map-zone[data-zone="South Woods"].active {
-  fill: rgba(199, 57, 255, 0.7);
+.map-zone[data-zone="South Woods"]:hover {
+  fill: rgba(199, 57, 255, 0.9);
   stroke: rgba(199, 57, 255, 1);
 }
 
@@ -99,9 +94,8 @@
   cursor: pointer;
 }
 
-.map-zone[data-zone="Castle"]:hover,
-.map-zone[data-zone="Castle"].active {
-  fill: rgba(255, 255, 255, 0.7);
+.map-zone[data-zone="Castle"]:hover {
+  fill: rgba(255, 255, 255, 0.9);
   stroke: rgba(255, 255, 255, 1);
 }
 
@@ -115,9 +109,8 @@
   cursor: pointer;
 }
 
-.map-zone[data-zone="Forest"]:hover,
-.map-zone[data-zone="Forest"].active {
-  fill: rgba(0, 255, 106, 0.7);
+.map-zone[data-zone="Forest"]:hover {
+  fill: rgba(0, 255, 106, 0.9);
   stroke: rgba(0, 255, 106, 1);
 }
 
@@ -131,9 +124,8 @@
   cursor: pointer;
 }
 
-.map-zone[data-zone="Kill House"]:hover,
-.map-zone[data-zone="Kill House"].active {
-  fill: rgba(255, 25, 0, 0.7);
+.map-zone[data-zone="Kill House"]:hover {
+  fill: rgba(255, 25, 0, 0.9);
   stroke: rgba(255, 25, 0, 1);
 }
 
@@ -147,9 +139,8 @@
   cursor: pointer;
 }
 
-.map-zone[data-zone="North Buildings"]:hover,
-.map-zone[data-zone="North Buildings"].active {
-  fill: rgba(243, 156, 18, 0.7);
+.map-zone[data-zone="North Buildings"]:hover {
+  fill: rgba(243, 156, 18, 0.9);
   stroke: rgba(243, 156, 18, 1);
 }
 
@@ -163,10 +154,25 @@
   cursor: pointer;
 }
 
-.map-zone[data-zone="No Man's Land"]:hover,
-.map-zone[data-zone="No Man's Land"].active {
-  fill: rgba(225, 255, 0, 0.7);
+.map-zone[data-zone="No Man's Land"]:hover {
+  fill: rgba(225, 255, 0, 0.9);
   stroke: rgba(225, 255, 0, 1);
+}
+
+/* Hover and active states */
+.map-zone[data-zone="Red Spawn"]:hover,
+.map-zone[data-zone="Red Spawn"].active {
+  fill: rgba(255, 0, 0, 0.4);
+}
+
+.map-zone[data-zone="Blue Spawn"]:hover,
+.map-zone[data-zone="Blue Spawn"].active {
+  fill: rgba(0, 0, 255, 0.4);
+}
+
+.map-zone[data-zone]:not([data-zone="Red Spawn"]):not([data-zone="Blue Spawn"]):hover,
+.map-zone[data-zone]:not([data-zone="Red Spawn"]):not([data-zone="Blue Spawn"]).active {
+  opacity: 0.3;
 }
 
 * {
@@ -195,11 +201,11 @@ overflow: hidden;
 z-index: 1;
 }
 
-/*  field background - sits above black, below grid */
+/* Photo field background - sits above black, below grid */
 .field-image {
 position: absolute;
 inset: 0;
-background-image: url('https://github.com/SpaceStudiosInc/Alpha_Airsoft/blob/30cf3815cb6bf3079457e14ff694ab47b693a074/photo%20field_.png');
+background-image: url('photo field.png');
 background-size: cover;
 background-position: center;
 opacity: 0.25;
@@ -309,7 +315,6 @@ background: transparent;
 border: none;
 cursor: pointer;
 padding: 0.5rem;
-z-index: 1001;
 }
 .hamburger div {
 width: 25px;
@@ -380,7 +385,7 @@ width: 100%;
 aspect-ratio: 1809 / 2160;
 background: #111;
 border-radius: 4px;
-overflow: visible;
+overflow: hidden;
 }
 .map-image {
 width: 100%;
@@ -394,10 +399,17 @@ top: 0;
 left: 0;
 width: 100%;
 height: 100%;
-pointer-events: none;
 }
-.svg-overlay > * {
-pointer-events: auto;
+.map-zone {
+fill: rgba(30, 144, 255, 0.02);
+stroke: rgba(30, 144, 255, 0.5);
+stroke-width: 2;
+transition: all 0.3s ease;
+}
+.map-zone:hover {
+fill: rgba(30, 144, 255, 0.35);
+stroke: rgba(30, 144, 255, 0.9);
+filter: drop-shadow(0 0 15px rgba(30, 144, 255, 0.6));
 }
 .zone-tooltip {
 position: fixed;
@@ -408,7 +420,7 @@ border-radius: 4px;
 font-size: 14px;
 pointer-events: none;
 opacity: 0;
-z-index: 10000;
+z-index: 100;
 border: 2px solid var(--primary);
 box-shadow: 0 0 20px rgba(30, 144, 255, 0.6);
 font-weight: 600;
@@ -420,11 +432,14 @@ transition: opacity 0.2s ease;
 opacity: 1;
 }
 .map-legend {
-margin-top: 1.5rem;
+position: absolute;
+bottom: 20px;
+right: 20px;
 background: rgba(10, 10, 10, 0.8);
 padding: 15px;
 border-radius: 4px;
 border: 1px solid rgba(30, 144, 255, 0.3);
+z-index: 5;
 font-size: 13px;
 }
 .legend-item {
@@ -454,49 +469,11 @@ font-family: 'Orbitron', sans-serif;
 .info-section p {
 margin: 0.8rem 0;
 opacity: 0.9;
-line-height: 1.6;
 }
 .info-highlight {
 color: var(--primary);
 font-weight: 600;
 }
-
-/* Mobile toast notification */
-.mobile-zone-label {
-position: absolute;
-display: none;
-background: rgba(30, 144, 255, 0.95);
-color: white;
-padding: 0.8rem 1.5rem;
-border-radius: 8px;
-border: 2px solid rgba(255, 255, 255, 0.3);
-box-shadow: 0 4px 20px rgba(30, 144, 255, 0.7);
-font-weight: 600;
-letter-spacing: 1px;
-font-size: 1rem;
-text-transform: uppercase;
-z-index: 10000;
-pointer-events: none;
-white-space: nowrap;
-transform: translate(-50%, -50%);
-}
-
-.mobile-zone-label.show {
-display: block;
-animation: fadeInScale 0.3s ease;
-}
-
-@keyframes fadeInScale {
-from {
-opacity: 0;
-transform: translate(-50%, -50%) scale(0.9);
-}
-to {
-opacity: 1;
-transform: translate(-50%, -50%) scale(1);
-}
-}
-
 /* Mobile Styles */
 @media screen and (max-width: 768px) {
   html {
@@ -505,6 +482,7 @@ transform: translate(-50%, -50%) scale(1);
   
   .hamburger { 
     display: flex;
+    z-index: 1001;
   }
   
   .nav-links {
@@ -561,7 +539,7 @@ transform: translate(-50%, -50%) scale(1);
   }
   
   .content {
-    padding: 5rem 3% 2rem;
+    padding: 5rem 1rem 2rem;
   }
   
   .section-header {
@@ -569,7 +547,7 @@ transform: translate(-50%, -50%) scale(1);
   }
   
   .section-title {
-    font-size: clamp(1.8rem, 8vw, 2.5rem);
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
   }
   
   .section-number {
@@ -577,26 +555,27 @@ transform: translate(-50%, -50%) scale(1);
   }
   
   .map-container {
-    width: 100%;
+    width: 90%;
     padding: 1rem;
-    margin: 0;
-    border-radius: 8px;
+    margin: 0 auto;
+    border-radius: 0;
   }
   
   .map-wrapper {
     border-radius: 4px;
-    touch-action: pan-x pan-y pinch-zoom;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
   }
   
   .map-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    min-width: 800px;
+    height: auto;
   }
   
   .svg-overlay {
-    width: 100%;
-    height: 100%;
+    min-width: 800px;
+    height: auto;
   }
   
   .zone-tooltip {
@@ -604,27 +583,29 @@ transform: translate(-50%, -50%) scale(1);
   }
   
   .map-legend {
+    position: relative;
+    bottom: auto;
+    right: auto;
     margin-top: 1rem;
+    width: 100%;
     font-size: 0.85rem;
   }
   
-  .info-section {
-    margin-top: 1rem;
-    padding: 1rem;
-    border-radius: 4px;
+  .map-legend-item {
+    padding: 0.5rem;
+    min-height: 32px;
   }
   
-  .info-section p {
-    font-size: 0.95rem;
+  .info-section {
+    margin: 1rem -1rem -1rem;
+    border-radius: 0;
+    border-left: none;
+    border-top: 3px solid var(--primary);
+    padding: 1rem;
   }
   
   .field-image {
-    opacity: 0.35;
-  }
-  
-  /* Increase touch target size on mobile */
-  .map-zone {
-    stroke-width: 3;
+    opacity: 0.5;
   }
 }
 
@@ -635,7 +616,6 @@ transform: translate(-50%, -50%) scale(1);
   }
   
   .map-container {
-    width: 85%;
     padding: 1.5rem;
   }
   
@@ -667,11 +647,11 @@ transform: translate(-50%, -50%) scale(1);
   }
   
   .content {
-    padding: 4.5rem 2% 1.5rem;
+    padding: 4.5rem 0.5rem 1.5rem;
   }
   
   .section-title {
-    font-size: clamp(1.5rem, 10vw, 2rem);
+    font-size: clamp(1.5rem, 8vw, 2rem);
   }
   
   .section-number {
@@ -679,47 +659,36 @@ transform: translate(-50%, -50%) scale(1);
   }
   
   .map-container {
-    width: 100%;
-    padding: 0.75rem;
+    width: 95%;
+    padding: 0.5rem;
+    margin: 0 auto;
   }
   
   .map-wrapper {
-    border-radius: 4px;
+    border-radius: 2px;
+  }
+  
+  .map-image {
+    min-width: 600px;
+  }
+  
+  .svg-overlay {
+    min-width: 600px;
   }
   
   .map-legend {
     font-size: 0.75rem;
-    padding: 10px;
   }
   
-  .legend-item {
-    margin: 6px 0;
-    font-size: 0.85rem;
+  .map-legend-item {
+    padding: 0.4rem;
+    min-height: 28px;
   }
   
   .info-section {
+    margin: 0.5rem -0.5rem -0.5rem;
     padding: 0.8rem;
     font-size: 0.9rem;
-  }
-  
-  /* Even larger touch targets for small devices */
-  .map-zone {
-    stroke-width: 4;
-  }
-}
-
-/* Landscape mobile optimization */
-@media screen and (max-width: 896px) and (orientation: landscape) {
-  .content {
-    padding: 4rem 3% 2rem;
-  }
-  
-  .section-header {
-    margin-bottom: 1.5rem;
-  }
-  
-  .section-title {
-    font-size: clamp(1.5rem, 5vw, 2rem);
   }
 }
 </style>
@@ -757,7 +726,7 @@ transform: translate(-50%, -50%) scale(1);
 <div class="map-container">
 <div class="map-wrapper" id="mapWrapper">
 <img src="Map.png" alt="Alpha Airsoft Map" class="map-image" id="mapImage">
-<svg class="svg-overlay" id="svgOverlay" viewBox="0 0 1809 2160" preserveAspectRatio="xMidYMid meet">
+<svg class="svg-overlay" id="svgOverlay" preserveAspectRatio="none">
 <!-- Zone 1: Red Spawn -->
 <polygon class="map-zone" data-zone="Red Spawn" points="450,355 559,76 909,70 909,355" />
 
@@ -788,27 +757,19 @@ transform: translate(-50%, -50%) scale(1);
 <!-- Zone 10: Blue Spawn -->
 <polygon class="map-zone" data-zone="Blue Spawn" points="1799,1261 1476,1260 1472,1512 1799,1502" />
 </svg>
-<div class="mobile-zone-label" id="mobileLabel"></div>
-</div>
-
-<div class="map-legend">
-<div class="legend-item">
-<div class="legend-color" style="background: rgba(30, 144, 255, 0.3);"></div>
-<span>Tap zones to highlight</span>
-</div>
 </div>
 
 <div class="info-section">
 <h3>Alpha Airsoft</h3>
 <p><span class="info-highlight">📍</span> 35°19'43.9"N 94°20'35.0"W, Fort Smith, AR 72901</p>
 <div style="margin-top: 1.5rem; opacity: 0.8; font-size: 0.9rem;">
-<p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4f262129200f2e233f272e2e263d3c20293b612c2022">[email&#160;protected]</a></p>
+<p>📧 info@alphaairsoft.com</p>
 </div>
 </div>
 </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
   const fieldImg = document.getElementById('fieldImage');
   const grid = document.getElementById('grid');
@@ -823,15 +784,14 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollY = window.scrollY;
   });
 
-  if (!isMobile) {
-    document.addEventListener('mousemove', e => {
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
+  document.addEventListener('mousemove', e => {
+    if (isMobile) return;
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
 
-      fieldImg.style.setProperty('--mx', `${e.clientX}px`);
-      fieldImg.style.setProperty('--my', `${e.clientY}px`);
-    });
-  }
+    fieldImg.style.setProperty('--mx', `${e.clientX}px`);
+    fieldImg.style.setProperty('--my', `${e.clientY}px`);
+  });
 
   function raf() {
     if (!isMobile) {
@@ -909,102 +869,72 @@ document.addEventListener('DOMContentLoaded', () => {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
-    const clockEl = document.getElementById('clock');
-    if (clockEl) {
-      clockEl.textContent = `${hours}:${minutes}:${seconds}`;
-    }
+    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
   }
 
   updateClock();
   setInterval(updateClock, 1000);
 
-  // Interactive map zones
+  function scaleSVG() {
+    const svg = document.getElementById('svgOverlay');
+    const mapWrapper = document.getElementById('mapWrapper');
+    if (!svg || !mapWrapper) return;
+    
+    const wrapperWidth = mapWrapper.offsetWidth;
+    const wrapperHeight = mapWrapper.offsetHeight;
+    
+    if (window.innerWidth <= 768) {
+      const scale = Math.min(wrapperWidth / 800, 1);
+      svg.style.transform = `scale(${scale})`;
+      svg.style.transformOrigin = 'top left';
+      svg.style.width = `${800}px`;
+      svg.style.height = 'auto';
+    } else {
+      svg.style.transform = 'none';
+      svg.style.width = '100%';
+      svg.style.height = '100%';
+    }
+    
+    const viewBoxAspect = 1809 / 2160;
+    const containerAspect = wrapperWidth / wrapperHeight;
+    
+    if (containerAspect > viewBoxAspect) {
+      const height = wrapperWidth / viewBoxAspect;
+      svg.setAttribute('viewBox', `0 0 1809 ${height * (2160/wrapperHeight)}`);
+    } else {
+      const width = wrapperHeight * viewBoxAspect;
+      svg.setAttribute('viewBox', `0 0 ${width * (1809/wrapperWidth)} 2160`);
+    }
+  }
+
+  scaleSVG();
+  window.addEventListener('resize', scaleSVG);
+
   const zones = document.querySelectorAll('.map-zone');
   const tooltip = document.getElementById('tooltip');
-  const mobileLabel = document.getElementById('mobileLabel');
-  let activeMobileZone = null;
-  let labelTimeout = null;
 
   zones.forEach(zone => {
-    // Mobile tap behavior - handle both click and touch
-    if (isMobile) {
-      const handleZoneTap = function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        const zoneName = this.getAttribute('data-zone');
-        
-        // Remove active class from all zones
-        zones.forEach(z => z.classList.remove('active'));
-        
-        // Add active class to clicked zone
-        this.classList.add('active');
-        activeMobileZone = this;
-        
-        // Calculate the center point of the polygon
-        const bbox = this.getBBox();
-        const centerX = bbox.x + bbox.width / 2;
-        const centerY = bbox.y + bbox.height / 2;
-        
-        // Get the SVG and map wrapper dimensions
-        const svg = document.getElementById('svgOverlay');
-        const svgRect = svg.getBoundingClientRect();
-        const viewBox = svg.viewBox.baseVal;
-        
-        // Convert SVG coordinates to screen coordinates (relative to SVG)
-        const scaleX = svgRect.width / viewBox.width;
-        const scaleY = svgRect.height / viewBox.height;
-        
-        const screenX = centerX * scaleX;
-        const screenY = centerY * scaleY;
-        
-        // Position label at the center of the zone (relative to map wrapper)
-        mobileLabel.textContent = zoneName;
-        mobileLabel.style.left = screenX + 'px';
-        mobileLabel.style.top = screenY + 'px';
-        mobileLabel.classList.add('show');
-        
-        // Clear existing timeout
-        if (labelTimeout) {
-          clearTimeout(labelTimeout);
-        }
-        
-        // Hide label after 2.5 seconds
-        labelTimeout = setTimeout(() => {
-          mobileLabel.classList.remove('show');
-          if (activeMobileZone) {
-            activeMobileZone.classList.remove('active');
-            activeMobileZone = null;
-          }
-        }, 2500);
-      };
+    zone.addEventListener('mouseenter', function(e) {
+      const zoneName = this.getAttribute('data-zone');
+      tooltip.textContent = zoneName;
+      tooltip.classList.add('show');
+    });
+
+    zone.addEventListener('mousemove', (e) => {
+      // Get the actual cursor position accounting for page scroll
+      const cursorX = e.clientX + window.scrollX;
+      const cursorY = e.clientY + window.scrollY;
       
-      zone.addEventListener('click', handleZoneTap);
-      zone.addEventListener('touchend', handleZoneTap);
-    } 
-    // Desktop hover behavior
-    else {
-      zone.addEventListener('mouseenter', function(e) {
-        const zoneName = this.getAttribute('data-zone');
-        tooltip.textContent = zoneName;
-        tooltip.classList.add('show');
-      });
+      // Position tooltip relative to cursor with offset
+      tooltip.style.left = (cursorX + 15) + 'px';
+      tooltip.style.top = (cursorY + 15) + 'px';
+    });
 
-      zone.addEventListener('mousemove', (e) => {
-        const cursorX = e.clientX;
-        const cursorY = e.clientY;
-        tooltip.style.left = (cursorX + 15) + 'px';
-        tooltip.style.top = (cursorY + 15) + 'px';
-      });
-
-      zone.addEventListener('mouseleave', function() {
-        tooltip.classList.remove('show');
-      });
-    }
+    zone.addEventListener('mouseleave', function() {
+      tooltip.classList.remove('show');
+    });
   });
-
-  // Clear active zone when tapping outside on mobile
-  if (isMobile) {
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.map-zone')) {
-        zones.forEach(z => z.cl
+});
+</script>
+</body>
+</html>
