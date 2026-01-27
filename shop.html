@@ -87,12 +87,15 @@ color: var(--primary);
 }
 .scroll-indicator {
   text-align: center;
-  padding: 2rem 0;
-  position: relative;
-  z-index: 5;
+  padding: 1rem 0;
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
 }
 
-.scroll-indicator .category-number {
+.scroll-indicator .scroll-text {
   font-size: 1rem;
   color: var(--primary);
   letter-spacing: 3px;
@@ -136,9 +139,9 @@ z-index: 1;
 .shop-image {
 position: absolute;
 inset: 0;
-background-image: url('https://github.com/SpaceStudiosInc/Alpha_Airsoft/blob/b25da579e1336f3a97c28ffba31b5f360883f448/photo%20shop.png');
-background-size: 100% auto;
-background-position: center top;
+background-image: url('https://raw.githubusercontent.com/SpaceStudiosInc/Alpha_Airsoft/b25da579e1336f3a97c28ffba31b5f360883f448/photo%20shop.png');
+background-size: cover;
+background-position: center;
 background-repeat: no-repeat;
 opacity: 0.5;
 width: 100%;
@@ -210,7 +213,12 @@ perspective: 1000px;
 .hero-subtitle {
 font-size: clamp(1.2rem, 3vw, 2rem);
 color: rgba(255, 255, 255, 0.8);
-margin-bottom: 3rem;
+margin-bottom: 1rem;
+}
+.section-subtitle {
+font-size: clamp(0.9rem, 2vw, 1.2rem);
+color: rgba(255, 255, 255, 0.5);
+font-style: italic;
 }
 .category-section {
 min-height: 100vh;
@@ -409,6 +417,10 @@ transform: rotate(-45deg) translate(7px, -6px);
 display: none;
 }
 
+.scroll-indicator {
+bottom: 2rem;
+}
+
 .hero-section {
 padding: 2rem 1rem;
 }
@@ -420,7 +432,11 @@ margin-bottom: 1rem;
 
 .hero-subtitle {
 font-size: clamp(1rem, 3vw, 1.5rem);
-margin-bottom: 2rem;
+margin-bottom: 1rem;
+}
+
+.section-subtitle {
+font-size: clamp(0.8rem, 2.5vw, 1rem);
 }
 
 .category-section {
@@ -508,6 +524,10 @@ font-size: clamp(2.5rem, 7vw, 5rem);
 .hero-subtitle {
 font-size: clamp(1.2rem, 3vw, 1.8rem);
 }
+
+.scroll-indicator {
+bottom: 2.5rem;
+}
 }
 
 /* Small Mobile Devices */
@@ -530,6 +550,14 @@ font-size: clamp(1.8rem, 10vw, 3rem);
 
 .hero-subtitle {
 font-size: clamp(0.9rem, 4vw, 1.3rem);
+}
+
+.section-subtitle {
+font-size: clamp(0.75rem, 3vw, 0.9rem);
+}
+
+.scroll-indicator {
+bottom: 1.5rem;
 }
 
 .category-section {
@@ -601,9 +629,11 @@ font-size: 0.8rem;
 <h1 class="hero-title" id="scrambleText" data-value="CLAYTON APPROVED">CLAYTON APPROVED</h1>
 <p class="hero-subtitle">Premium Airsoft Gear & Equipment</p>
 <p class="section-subtitle">*Clayton's Opinion May Vary*</p>
-</section>
+</div>
 <div class="scroll-indicator">
-  <div class="category-number">↓ Scroll Down ↓</div>
+  <div class="scroll-text">↓ Scroll Down ↓</div>
+</div>
+</section>
 
 <!-- Eye Protection -->
 <section class="category-section" id="protective">
