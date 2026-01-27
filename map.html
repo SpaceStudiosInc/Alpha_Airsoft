@@ -898,39 +898,37 @@ document.addEventListener('DOMContentLoaded', () => {
   function scaleSVG() {
     const svg = document.getElementById('svgOverlay');
     const mapWrapper = document.getElementById('mapWrapper');
-    if (!svg || !mapWrapper) return;
+    const mapImage = document.getElementById('mapImage');
+    if (!svg || !mapWrapper || !mapImage) return;
     
-    const wrapperWidth = mapWrapper.offsetWidth;
-    const wrapperHeight = mapWrapper.offsetHeight;
-    
-    if (window.innerWidth <= 768) {
-      // On mobile, make SVG fully responsive
-      svg.style.transform = 'none';
-      svg.style.width = '100%';
-      svg.style.height = '100%';
-      svg.setAttribute('viewBox', '0 0 1809 2160');
-      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    } else {
-      // Desktop behavior
-      svg.style.transform = 'none';
-      svg.style.width = '100%';
-      svg.style.height = '100%';
-      
-      const viewBoxAspect = 1809 / 2160;
-      const containerAspect = wrapperWidth / wrapperHeight;
-      
-      if (containerAspect > viewBoxAspect) {
-        const height = wrapperWidth / viewBoxAspect;
-        svg.setAttribute('viewBox', `0 0 1809 ${height * (2160/wrapperHeight)}`);
-      } else {
-        const width = wrapperHeight * viewBoxAspect;
-        svg.setAttribute('viewBox', `0 0 ${width * (1809/wrapperWidth)} 2160`);
-      }
+    // Wait for image to load
+    if (!mapImage.complete) {
+      mapImage.onload = scaleSVG;
+      return;
     }
+    
+    const imageWidth = mapImage.naturalWidth;
+    const imageHeight = mapImage.naturalHeight;
+    
+    // Set viewBox to match the original image dimensions
+    svg.setAttribute('viewBox', `0 0 ${imageWidth} ${imageHeight}`);
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    
+    // Make SVG fully responsive to container
+    svg.style.width = '100%';
+    svg.style.height = '100%';
+    svg.style.transform = 'none';
   }
 
-  scaleSVG();
+  // Initial scale
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scaleSVG);
+  } else {
+    scaleSVG();
+  }
+  
   window.addEventListener('resize', scaleSVG);
+  window.addEventListener('load', scaleSVG);
 
   const zones = document.querySelectorAll('.map-zone');
   const tooltip = document.getElementById('tooltip');
